@@ -9,7 +9,7 @@ export type ToolView = {
  */
 tool: string, installed: boolean, 
 /**
- * The version Zajil installs.
+ * The version ALHami installs.
  */
 version: string | null, 
 /**

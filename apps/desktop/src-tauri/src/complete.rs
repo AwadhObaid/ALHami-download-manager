@@ -19,7 +19,7 @@ use zajil_core::queue::{Item, QueueEvent, Status, shown_url};
 
 use crate::App;
 
-/// The complete windows' capability: Zajil's events and the yes-or-no
+/// The complete windows' capability: ALHami's events and the yes-or-no
 /// question before a program opens. Added when the app starts.
 pub const CAPABILITY: &str = include_str!("../runtime-capabilities/complete.json");
 
@@ -211,7 +211,7 @@ pub fn show_if_done<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, id: u64) {
         let label = format!("{PREFIX}{id}");
         let page = format!("complete&id={id}");
         if let Err(err) = crate::windows::open_beside_main(&handle, &label, &page, &title, SIZE) {
-            eprintln!("zajil: the «download complete» window: {err}");
+            eprintln!("alhami: the «download complete» window: {err}");
         }
     });
 }

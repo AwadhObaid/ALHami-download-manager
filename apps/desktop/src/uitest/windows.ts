@@ -26,11 +26,11 @@ export async function run(win: string | null): Promise<void> {
   const loaded = new Set<string>();
   await listen<string>("ui-test-loaded", (e) => loaded.add(e.payload));
   const opens: [string, () => Promise<unknown>][] = [
-    ["add-link", () => api.openAddLink(null, false, "Zajil")],
-    ["add-info", () => api.openAddInfo("http://127.0.0.1:9/file.bin", "Zajil")],
-    ["progress-1", () => api.openProgress(1, "Zajil")],
-    ["progress-2", () => api.openStartedProgress(2, "Zajil")],
-    ["schedule", () => scheduleApi.open("Zajil")],
+    ["add-link", () => api.openAddLink(null, false, "ALHami")],
+    ["add-info", () => api.openAddInfo("http://127.0.0.1:9/file.bin", "ALHami")],
+    ["progress-1", () => api.openProgress(1, "ALHami")],
+    ["progress-2", () => api.openStartedProgress(2, "ALHami")],
+    ["schedule", () => scheduleApi.open("ALHami")],
     ["batch", () => api.openBatch(null)],
     ["grab", () => api.openGrab(null)],
     ["video", () => api.openVideo(null)],

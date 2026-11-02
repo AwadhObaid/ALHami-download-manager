@@ -1,5 +1,5 @@
-//! «A new version of Zajil is available» (#124, owner's decision): once at
-//! each start, after the window shows, if the settings allow it, Zajil asks
+//! «A new version of ALHami is available» (#124, owner's decision): once at
+//! each start, after the window shows, if the settings allow it, ALHami asks
 //! GitHub for its newest release (`zajil_core::update`). Not in a
 //! development build, whose version (0.0.0) would always find one. A
 //! failure (no network, GitHub's limit, an odd answer) is one line in the
@@ -8,12 +8,12 @@
 //!
 //! The signed update (ADR-0011, owner's request of 2026-10-31): the newest
 //! release's `latest.json` names, for this system, its file and that
-//! file's signature. Zajil offers «Update now» only when the signature is
+//! file's signature. ALHami offers «Update now» only when the signature is
 //! by one of the project's two keys built into it, and the file is in the
 //! project's own release downloads. Nothing is downloaded before the user
 //! says so; then the file is checked by our own code with that key, and
 //! again by Tauri's updater (which also checks the version it was signed
-//! for), the downloads stop after saving their progress, and Zajil is
+//! for), the downloads stop after saving their progress, and ALHami is
 //! replaced and opened again. A `.deb` has no file in `latest.json`: the
 //! notice and the release page only. «Skip this version» hides that one.
 
@@ -140,23 +140,23 @@ async fn signed_update<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) -> Optio
         Ok(update) => update?,
         // A system with no file in it (a `.deb`) says so here too.
         Err(e) => {
-            eprintln!("zajil: no signed update to install: {e}");
+            eprintln!("alhami: no signed update to install: {e}");
             return None;
         }
     };
     let Some((name, key)) = key_for(&update.signature, &KEYS) else {
-        eprintln!("zajil: the update is not signed by a key of Zajil's; not offered");
+        eprintln!("alhami: the update is not signed by a key of ALHami's; not offered");
         return None;
     };
     if !update.download_url.as_str().starts_with(DOWNLOADS) {
-        eprintln!("zajil: the update's file is not in Zajil's own releases; not offered");
+        eprintln!("alhami: the update's file is not in ALHami's own releases; not offered");
         return None;
     }
     // Tauri's own check is then made with that key.
     let update = if key == first {
         update
     } else {
-        eprintln!("zajil: the update is signed with the {name} key");
+        eprintln!("alhami: the update is signed with the {name} key");
         check(key).await.ok().flatten()?
     };
     Some(update)
@@ -191,12 +191,12 @@ pub fn check_at_start(handle: &tauri::AppHandle) {
             tauri::async_runtime::spawn(async move {
                 match zajil_core::tools_list::fetch_and_keep(&engine, &data, &stop).await {
                     Ok(Some(list)) => eprintln!(
-                        "zajil: the video tools list {} is kept: yt-dlp {}",
+                        "alhami: the video tools list {} is kept: yt-dlp {}",
                         list.sequence,
                         list.pins(zajil_core::tools::Tool::YtDlp).version
                     ),
                     Ok(None) => {}
-                    Err(e) => eprintln!("zajil: the video tools list: {e}"),
+                    Err(e) => eprintln!("alhami: the video tools list: {e}"),
                 }
             });
         }
@@ -261,15 +261,15 @@ where
     match check().await {
         Ok(found) => found,
         Err(err) => {
-            eprintln!("zajil: the update check: {err}");
+            eprintln!("alhami: the update check: {err}");
             None
         }
     }
 }
 
 /// The browser extension's version, when it said it is older than this
-/// Zajil needs (`zajil_host::MIN_EXTENSION`, owner's request, 2026-10-31:
-/// it does not update itself, and an old one misses what Zajil asks of it).
+/// ALHami needs (`zajil_host::MIN_EXTENSION`, owner's request, 2026-10-31:
+/// it does not update itself, and an old one misses what ALHami asks of it).
 #[derive(Default)]
 pub struct ExtensionOld(Mutex<Option<String>>);
 
@@ -339,8 +339,8 @@ pub async fn update_skip<R: tauri::Runtime>(handle: tauri::AppHandle<R>) -> Resu
 /// «Update now»: the file downloaded (its progress as `update-progress`),
 /// checked by our own code with the key that signed it, then the
 /// downloads stop after saving their progress, and Tauri's updater checks
-/// it again, installs it, and Zajil opens again. On Windows the installer
-/// ends Zajil itself and opens it again.
+/// it again, installs it, and ALHami opens again. On Windows the installer
+/// ends ALHami itself and opens it again.
 #[tauri::command]
 pub async fn update_install<R: tauri::Runtime>(handle: tauri::AppHandle<R>) -> Result<(), String> {
     let Some(update) = handle.state::<Notice>().1.lock().unwrap().clone() else {
@@ -366,16 +366,16 @@ pub async fn update_install<R: tauri::Runtime>(handle: tauri::AppHandle<R>) -> R
         )
         .await
         .map_err(|e| {
-            eprintln!("zajil: the update could not be downloaded or checked: {e}");
+            eprintln!("alhami: the update could not be downloaded or checked: {e}");
             e.to_string()
         })?;
     let ours = key_for(&update.signature, &KEYS)
         .is_some_and(|(_, key)| signed_by(&bytes, &update.signature, key));
     if !ours {
-        eprintln!("zajil: the update's file is not signed by a key of Zajil's; not installed");
+        eprintln!("alhami: the update's file is not signed by a key of ALHami's; not installed");
         return Err("the update could not be checked".into());
     }
-    eprintln!("zajil: installing the update to {}", update.version);
+    eprintln!("alhami: installing the update to {}", update.version);
     // As when quitting: the downloads save their progress and stop, and
     // continue after the update.
     {
@@ -386,7 +386,7 @@ pub async fn update_install<R: tauri::Runtime>(handle: tauri::AppHandle<R>) -> R
     }
     if let Err(e) = update.install(&bytes) {
         // Opened again as it was: the bar comes back at its start.
-        eprintln!("zajil: the update could not be installed: {e}");
+        eprintln!("alhami: the update could not be installed: {e}");
     }
     handle.restart()
 }
@@ -414,7 +414,8 @@ mod tests {
     fn release() -> NewRelease {
         NewRelease {
             version: "0.2.0".into(),
-            page: "https://github.com/AwadhObaid/ALHami-download-manager/releases/tag/v0.2.0".into(),
+            page: "https://github.com/AwadhObaid/ALHami-download-manager/releases/tag/v0.2.0"
+                .into(),
         }
     }
 

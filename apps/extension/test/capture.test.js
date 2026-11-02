@@ -46,7 +46,7 @@ function fakeApi({ answer, nativeError, pauseError } = {}) {
   };
 }
 
-describe("which downloads go to Zajil", () => {
+describe("which downloads go to ALHami", () => {
   it("captures a listed type, from the browser's name or the URL", () => {
     const s = defaults();
     expect(shouldCapture(item(), s)).toBe(true);
@@ -147,7 +147,7 @@ describe("the message zajil-host accepts", () => {
   });
 });
 
-describe("Download with Zajil on a link", () => {
+describe("Download with ALHami on a link", () => {
   it("sends a web link with its page, and nothing else", () => {
     expect(menuMessage({ linkUrl: "https://example.com/a.zip", pageUrl: "https://example.com/" })).toEqual(
       downloadMessage("https://example.com/a.zip", { referrer: "https://example.com/" }),
@@ -218,7 +218,7 @@ describe("handing a download over, in Firefox", () => {
 });
 
 describe("handing a download over, in Chrome and Edge", () => {
-  it("taken by Zajil: the browser's download is paused, then cancelled and removed", async () => {
+  it("taken by ALHami: the browser's download is paused, then cancelled and removed", async () => {
     const api = fakeApi({ answer: { protocol_version: 1, ok: true } });
     expect(await takeOver(api, item(), { pause: true })).toEqual({ outcome: "taken" });
     expect(api.calls.map((c) => c[0])).toEqual(["pause", "native", "cancel", "erase"]);
@@ -226,19 +226,19 @@ describe("handing a download over, in Chrome and Edge", () => {
     expect(api.calls[1][2].url).toBe("https://cdn.example.com/files/setup.exe");
   });
 
-  it("refused by Zajil: the browser goes on with it", async () => {
+  it("refused by ALHami: the browser goes on with it", async () => {
     const api = fakeApi({ answer: { protocol_version: 1, ok: false, error: "the URL has control characters" } });
     expect((await takeOver(api, item(), { pause: true })).outcome).toBe("refused");
     expect(api.calls.map((c) => c[0])).toEqual(["pause", "native", "resume"]);
   });
 
-  it("no host (Zajil not installed): the browser goes on with it", async () => {
+  it("no host (ALHami not installed): the browser goes on with it", async () => {
     const api = fakeApi({ nativeError: "Specified native messaging host not found." });
     expect((await takeOver(api, item(), { pause: true })).outcome).toBe("unreachable");
     expect(api.calls.map((c) => c[0])).toEqual(["pause", "native", "resume"]);
   });
 
-  it("no answer in time: it stays paused, since Zajil may have it (#64)", async () => {
+  it("no answer in time: it stays paused, since ALHami may have it (#64)", async () => {
     const api = fakeApi({ answer: { protocol_version: 1, ok: false, error: `${NO_ANSWER[0]} within 10 s` } });
     expect((await takeOver(api, item(), { pause: true })).outcome).toBe("unknown");
     expect(api.calls.map((c) => c[0])).toEqual(["pause", "native"]);
@@ -251,7 +251,7 @@ describe("handing a download over, in Chrome and Edge", () => {
   });
 
   it("an answer that came back broken counts as unknown, not refused", async () => {
-    for (const error of ["Zajil did not answer: connection reset", "Zajil's answer is not valid: EOF"]) {
+    for (const error of ["ALHami did not answer: connection reset", "ALHami's answer is not valid: EOF"]) {
       const api = fakeApi({ answer: { protocol_version: 1, ok: false, error } });
       expect((await takeOver(api, item(), { pause: true })).outcome, error).toBe("unknown");
       expect(api.calls.map((c) => c[0])).toEqual(["pause", "native"]);
@@ -260,12 +260,12 @@ describe("handing a download over, in Chrome and Edge", () => {
 
   it("zajil-host's own failures come with their code; only no answer is unknown", async () => {
     const answer = (code, error) => fakeApi({ answer: { protocol_version: 1, ok: false, error, code } });
-    expect(await send(answer("no_answer", "Zajil did not answer"), {})).toEqual({ outcome: "unknown", error: "Zajil did not answer", code: "no_answer" });
+    expect(await send(answer("no_answer", "ALHami did not answer"), {})).toEqual({ outcome: "unknown", error: "ALHami did not answer", code: "no_answer" });
     for (const code of ["not_running", "not_found", "unreachable"]) {
       expect(await send(answer(code, "x"), {}), code).toEqual({ outcome: "refused", error: "x", code });
     }
     // A code it does not know is not passed on: the text decides, as before.
-    expect(await send(answer("weird", "Zajil did not answer"), {})).toEqual({ outcome: "unknown", error: "Zajil did not answer" });
+    expect(await send(answer("weird", "ALHami did not answer"), {})).toEqual({ outcome: "unknown", error: "ALHami did not answer" });
     // Every code has its text in both languages.
     for (const lang of ["ar", "en"]) {
       const texts = JSON.parse(readFileSync(new URL(`../src/_locales/${lang}/messages.json`, import.meta.url), "utf8"));
@@ -303,7 +303,7 @@ describe("videoMessage (M6)", () => {
     expect(samePost(42, "https://x.com/home")).toBeUndefined();
   });
 
-  it("leaves out an address only the page can read, and refuses a page Zajil cannot", () => {
+  it("leaves out an address only the page can read, and refuses a page ALHami cannot", () => {
     for (const srcUrl of ["blob:https://example.com/1", "data:video/mp4;base64,AAAA", "https://u:p@example.com/v.mp4", undefined]) {
       expect(videoMessage({ pageUrl: "https://example.com/v", srcUrl })?.media, String(srcUrl)).toBeUndefined();
     }
@@ -320,7 +320,7 @@ describe("videoMessage (M6)", () => {
   });
 });
 
-describe("the browser's download UI while Zajil takes a download", () => {
+describe("the browser's download UI while ALHami takes a download", () => {
   /** Chrome's `downloads.setUiOptions`, recording what it was told. */
   function uiApi() {
     const told = [];

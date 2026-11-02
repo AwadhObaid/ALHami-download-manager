@@ -125,7 +125,7 @@
 | `@tauri-apps/plugin-dialog` | 2.8.3 | Apache-2.0 أو MIT | نعم | واجهة الصفحة لنوافذ الفتح والحفظ (`tauri-plugin-dialog`) |
 | `@tauri-apps/plugin-notification` | 2.7.0 | Apache-2.0 أو MIT | نعم | إرسال الإشعار من الصفحة |
 | `@tauri-apps/plugin-autostart` | 2.7.0 | Apache-2.0 أو MIT | نعم | تفعيل التشغيل مع بدء النظام وإيقافه من الإعدادات |
-| `@resvg/resvg-js` | 2.6.2 | MPL-2.0 | لا (أداة) | رسم أيقونة شريط النظام في ماك من `zajil-mark.svg` (`scripts/tray-icon.mjs`). والصورة الناتجة في المستودع |
+| `@resvg/resvg-js` | 2.6.2 | MPL-2.0 | لا (أداة) | رسم أيقونة شريط النظام من `alhami-mark.svg` (`scripts/tray-icon.mjs`). والصورة الناتجة في المستودع |
 | `axe-core` | 4.14.0 | MPL-2.0 | لا (اختبار) | فحص إمكانية الوصول الآلي في بناء `ui-test` فقط. والـ CI يتأكد أن صفحة الإصدار ليس فيها شيء منه |
 
 </div>

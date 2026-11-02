@@ -1,13 +1,13 @@
 // @ts-check
 // The HLS and DASH playlists a tab loads (M6, owner's decision): a page's
 // player often plays a `blob:` the page made, and the playlist behind it is
-// what Zajil can download. Only with "Allow Zajil on sites"; the requests
+// what ALHami can download. Only with "Allow ALHami on sites"; the requests
 // are watched, never blocked or changed.
 //
 // What is noted stays in memory (`storage.session`, never on disk), for its
 // tab only: forgotten when the tab loads another page or closes. It goes to
-// Zajil with that tab's video: when the user asks for it, or when the video
-// button shows over it (Zajil reads it ahead, #291). Nothing is noted from a
+// ALHami with that tab's video: when the user asks for it, or when the video
+// button shows over it (ALHami reads it ahead, #291). Nothing is noted from a
 // private window.
 
 import { isWeb } from "./capture.js";

@@ -85,13 +85,13 @@
   /**
    * The list's choices for what `yt-page.js` said, or null when it said
    * nothing usable (a live stream, or no format). The pictures go with the
-   * sound YouTube plays by default (Zajil then takes the video's own), or
+   * sound YouTube plays by default (ALHami then takes the video's own), or
    * with the sound of language `lang` when the user chose one (owner's
    * request, 2026-10-31), sent with it; `tracks` are the languages to
    * choose from, when there are several. YouTube's «default» is not the
    * video's own: it marks the dub in the viewer's language so (owner's
    * report, 2026-10-31: an Arabic dub chosen came as English), so the list
-   * never says which is the original; Zajil knows, from yt-dlp.
+   * never says which is the original; ALHami knows, from yt-dlp.
    * @param {any} data @param {string | null} [lang]
    * @returns {{ title: string, duration: string, video: Choice[], audio: Choice[], tracks: Track[], lang: string } | null}
    * @typedef {{ name: string, detail: string, size: string, bytes?: number, send: { id?: string, video?: string, audio?: string, language?: string } }} Choice
@@ -186,7 +186,7 @@
       video,
       audio,
       tracks: tracks.length > 1 ? tracks : [],
-      // The chosen language; "" for the video's own, Zajil's choice.
+      // The chosen language; "" for the video's own, ALHami's choice.
       lang: dub?.lang ?? "",
     };
   }

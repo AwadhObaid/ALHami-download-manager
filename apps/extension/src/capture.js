@@ -1,19 +1,19 @@
 // @ts-check
-// Which downloads go to Zajil, the message `zajil-host` accepts, and handing a
+// Which downloads go to ALHami, the message `zajil-host` accepts, and handing a
 // download over without losing it (ADR-0005).
 
 /** The Native Messaging host's name (`zajil_platform::ids::NATIVE_HOST_NAME`). */
-export const HOST = "io.github.motalim_ai.zajil.host";
+export const HOST = "com.awadhobaid.alhami_download_manager.host";
 /** `zajil_host::PROTOCOL_VERSION`. */
 export const PROTOCOL_VERSION = 1;
 /** The longest URL the host accepts (`zajil_host::MAX_URL`). */
 export const MAX_URL = 8 * 1024;
 /** The longest file name the host accepts, in UTF-8 bytes (`MAX_NAME`). */
 export const MAX_NAME = 255;
-/** How the host says the request reached Zajil but no answer came back (too
- * late, or broken): Zajil may have the download, so it is neither taken nor
+/** How the host says the request reached ALHami but no answer came back (too
+ * late, or broken): ALHami may have the download, so it is neither taken nor
  * refused (review of #62, #64, #70). */
-export const NO_ANSWER = ["Zajil did not answer", "Zajil's answer is not valid"];
+export const NO_ANSWER = ["ALHami did not answer", "ALHami's answer is not valid"];
 
 /** Control characters, C0 and C1, and the direction marks `zajil-host`
  * refuses in a URL (`queue::check_url`). */
@@ -72,7 +72,7 @@ export function sizeOf(item) {
 }
 
 /**
- * Whether a new browser download goes to Zajil: capture is on, it is not a
+ * Whether a new browser download goes to ALHami: capture is on, it is not a
  * private window's, it is an http(s) download the host would accept, of a
  * listed type or (when that is on) larger than the size set, and neither
  * its first URL, its final URL (after redirects) nor the page it came from
@@ -112,7 +112,7 @@ export function shouldCapture(item, settings, ownId) {
  * most), and the link's `Cookie` header when the user allowed it
  * (`cookies.cookieHeader`, already checked as the host checks it). And
  * this extension's instance id and the cookie store (a Firefox container),
- * so Zajil can ask it for the cookies again after a restart (M5).
+ * so ALHami can ask it for the cookies again after a restart (M5).
  *
  * @param {string} url
  * @param {{ referrer?: string, filename?: string, cookies?: string | null, instance?: string, store?: string, ticket?: string }} [extra]
@@ -134,8 +134,8 @@ export function downloadMessage(url, extra = {}) {
 }
 
 /**
- * The message for "Download with Zajil" on a link, or null when the link is
- * not one Zajil can download (`javascript:`, `data:`, a password in it…).
+ * The message for "Download with ALHami" on a link, or null when the link is
+ * not one ALHami can download (`javascript:`, `data:`, a password in it…).
  *
  * @param {{ linkUrl?: string, pageUrl?: string }} info
  * @param {string | null} [cookies] the link's `Cookie` header, if allowed
@@ -148,8 +148,8 @@ export function menuMessage(info, cookies = null, from = {}) {
 }
 
 /**
- * The message for "Download video with Zajil" on a video or audio element
- * (M6, ADR-0009), or null when its page is not one Zajil can read. The
+ * The message for "Download video with ALHami" on a video or audio element
+ * (M6, ADR-0009), or null when its page is not one ALHami can read. The
  * page goes to yt-dlp: that of the frame the video is in when it is in
  * one (an embedded player), else the tab's. The video's own address goes
  * too when it is http(s), for a page yt-dlp does not know; a `blob:` or
@@ -183,7 +183,7 @@ export function videoMessage(info, extra = {}) {
 /**
  * The post a video's button sent (`postUrl`), if it is a web page of the
  * same site as the page it was found in; else undefined: a page's script
- * never sends Zajil elsewhere.
+ * never sends ALHami elsewhere.
  * @param {unknown} post @param {string | undefined} page @returns {string | undefined}
  */
 export function samePost(post, page) {
@@ -207,10 +207,10 @@ const LIST_ID = /^(?!RD(?!CLAK5uy_)|TL)[\w-]{2,200}$/;
 
 /**
  * The page of the playlist `url` is about, for "Download the playlist with
- * Zajil" and the button's "The whole playlist": `url` is a YouTube
+ * ALHami" and the button's "The whole playlist": `url` is a YouTube
  * playlist's page (`/playlist?list=…`) or a video played from one
  * (`/watch?v=…&list=…`), and the page is `https://<the same site>/playlist?list=…`,
- * which Zajil's «Video quality» opens as a playlist. Else null.
+ * which ALHami's «Video quality» opens as a playlist. Else null.
  * @param {string | undefined} url
  */
 export function playlistPage(url) {
@@ -221,37 +221,37 @@ export function playlistPage(url) {
   return `https://${hostname}/playlist?list=${list}`;
 }
 
-/** Whether Zajil refused because the link is a web page, not a file
+/** Whether ALHami refused because the link is a web page, not a file
  * (the desktop app's `not_the_file`; a test reads its text there).
  * @param {Result | null} result */
 export function isPageRefusal(result) {
   return result?.outcome === "refused" && /the server sent a web page\b/.test(result.error ?? "");
 }
 
-/** Whether Zajil refused because the site wants a sign-in: the server
- * answered 401 or 403 to Zajil (`zajil_core::Error::Status`).
+/** Whether ALHami refused because the site wants a sign-in: the server
+ * answered 401 or 403 to ALHami (`zajil_core::Error::Status`).
  * @param {Result | null} result */
 export function needsSignIn(result) {
   return result?.outcome === "refused" && /the server answered 40[13]\b/.test(result.error ?? "");
 }
 
 /**
- * What became of a request: `taken` (Zajil has it, and reached the file),
+ * What became of a request: `taken` (ALHami has it, and reached the file),
  * `refused` (it has not), `unknown` (it may have it: no answer came back),
- * or `unreachable` (no host: Zajil is not installed, or the browser
+ * or `unreachable` (no host: ALHami is not installed, or the browser
  * integration needs fixing).
  *
  * `alsoInBrowser`: taken, but the browser had finished it meanwhile
  * (Firefox, a small file): it is kept in the browser's list too.
  *
- * `code`: when zajil-host itself could not hand it to Zajil, why
- * (`HOST_PROBLEMS`), to be said in Zajil's language (#264).
+ * `code`: when zajil-host itself could not hand it to ALHami, why
+ * (`HOST_PROBLEMS`), to be said in ALHami's language (#264).
  *
  * @typedef {{ outcome: "taken" | "refused" | "unknown" | "unreachable", error?: string, code?: string, alsoInBrowser?: boolean }} Result
  */
 
 /** zajil-host's own failures (`zajil_host::HostProblem`), each with the
- * text that says it: Zajil is not running, its program was not found, it
+ * text that says it: ALHami is not running, its program was not found, it
  * cannot be reached, or it did not answer (and may have it). */
 export const HOST_PROBLEMS = {
   not_running: "hostNotRunning",
@@ -261,7 +261,7 @@ export const HOST_PROBLEMS = {
 };
 
 /**
- * Sends `message` to Zajil through the host.
+ * Sends `message` to ALHami through the host.
  * @param {any} browserApi
  * @param {Record<string, unknown>} message
  * @returns {Promise<Result>}
@@ -282,15 +282,15 @@ export async function send(browserApi, message) {
 }
 
 /**
- * Hands a browser download to Zajil without losing it.
+ * Hands a browser download to ALHami without losing it.
  *
  * - Where pausing keeps what was downloaded (Chrome and Edge), the browser's
- *   download is paused first. Taken by Zajil, it is cancelled and removed
+ *   download is paused first. Taken by ALHami, it is cancelled and removed
  *   from the browser's list; refused or unreachable, it goes on in the
- *   browser; with no answer, it stays paused, since Zajil may have it.
+ *   browser; with no answer, it stays paused, since ALHami may have it.
  * - In Firefox, pausing a download that has no data yet cancels it for good
  *   (review of #70), so it is not paused: it goes on in the browser while
- *   Zajil is asked, and is cancelled only once Zajil has taken it.
+ *   ALHami is asked, and is cancelled only once ALHami has taken it.
  *
  * @param {any} browserApi
  * @param {any} item

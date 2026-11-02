@@ -1,4 +1,4 @@
-//! Zajil's desktop interface (M4, ADR-0003, ADR-0008): a Tauri 2 window
+//! ALHami's desktop interface (M4, ADR-0003, ADR-0008): a Tauri 2 window
 //! over the engine. Like the command line, it holds no download logic
 //! (ARCHITECTURE §1): it runs the queues with `zajil_core::queue::Runner`,
 //! sends the user's commands to the queues file, and shows what happens.
@@ -124,11 +124,11 @@ fn data_dir(args: &[String]) -> Result<PathBuf, String> {
         .to_path_buf())
 }
 
-/// The first line Zajil says: its release's version (`zajil_core::VERSION`;
+/// The first line ALHami says: its release's version (`zajil_core::VERSION`;
 /// this crate's own is always 0.0.0, #248) and its process.
 fn start_line(process: u32) -> String {
     format!(
-        "zajil: starting (version {}, process {process})",
+        "alhami: starting (version {}, process {process})",
         zajil_core::VERSION
     )
 }
@@ -187,7 +187,7 @@ fn new_app(data: &Path, system_download_dir: PathBuf) -> App {
     }
 }
 
-/// `builder` with the state of Zajil's parts: `app`, and each one's own.
+/// `builder` with the state of ALHami's parts: `app`, and each one's own.
 fn managed<R: tauri::Runtime>(
     builder: tauri::Builder<R>,
     app: App,
@@ -214,12 +214,12 @@ fn managed<R: tauri::Runtime>(
 
 pub fn run() {
     measure::start();
-    // Started from the Finder, the Start menu or a desktop file, what Zajil
+    // Started from the Finder, the Start menu or a desktop file, what ALHami
     // says goes to its log (~/Library/Logs/zajil and the like).
     if let Ok(paths) = SystemPaths::new()
         && let Err(e) = zajil_platform::console::log_stderr_to(&paths.log_dir().join("zajil.log"))
     {
-        eprintln!("zajil: no log file: {e}");
+        eprintln!("alhami: no log file: {e}");
     }
     zajil_platform::process::raise_open_files_limit();
     // Said at once, as each stage of the start below (#220: a start whose
@@ -233,14 +233,14 @@ pub fn run() {
     let app = new_app(&data, system_download_dir);
     #[cfg(unix)]
     let signals = shutdown::stop_signals();
-    // One Zajil per user: with its window hidden in the tray, opening Zajil
+    // One ALHami per user: with its window hidden in the tray, opening ALHami
     // again shows it instead of starting a second program on the same
     // queues (review of #109). Not with `--data-dir` (the tests and the
     // screenshots, each on a folder of its own).
     let one_zajil = !args.iter().any(|a| a == "--data-dir");
-    // On macOS through Zajil's own channel in its data folder: the plugin
+    // On macOS through ALHami's own channel in its data folder: the plugin
     // there listens at a fixed path in `/tmp`, where another user of the
-    // Mac could answer first and keep Zajil from ever opening (#60).
+    // Mac could answer first and keep ALHami from ever opening (#60).
     #[cfg(target_os = "macos")]
     if one_zajil && instance::show_running(&data) {
         return;
@@ -260,7 +260,7 @@ pub fn run() {
         // Opens a finished download or its folder from Rust only
         // (`open_download`): the page has no opener permission.
         .plugin(tauri_plugin_opener::init())
-        // Zajil's own signed update (ADR-0011, `update.rs`): from Rust only,
+        // ALHami's own signed update (ADR-0011, `update.rs`): from Rust only,
         // no permission for the page.
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_autostart::init(
@@ -302,7 +302,7 @@ pub fn run() {
             let handle = tauri_app.handle().clone();
             if let Some(window) = tauri_app.get_webview_window("main") {
                 eprintln!(
-                    "zajil: the window is made (shown: {}); its page is loading",
+                    "alhami: the window is made (shown: {}); its page is loading",
                     window.is_visible().unwrap_or(false)
                 );
             }
@@ -314,13 +314,13 @@ pub fn run() {
             // stop path through tao's own handling (`RunEvent::Exit`).
             #[cfg(windows)]
             if let Err(err) = shutdown::on_windows_session_end(tauri_app) {
-                eprintln!("zajil: cannot watch for the end of the Windows session: {err}");
+                eprintln!("alhami: cannot watch for the end of the Windows session: {err}");
             }
             tray::build(tauri_app)?;
             extension::serve_extension(tauri_app.handle().clone(), data.clone());
             clipboard::watch_clipboard(tauri_app.handle().clone());
             // The browser integration, at each start: idempotent, and a
-            // browser installed since then finds Zajil. Not in a ui-test
+            // browser installed since then finds ALHami. Not in a ui-test
             // scene, whose files are demo ones.
             if !in_scene(tauri_app.handle()) {
                 let data = data.clone();
@@ -328,7 +328,7 @@ pub fn run() {
                 std::thread::spawn(move || {
                     let integration = integration::integrate_browsers(&data);
                     for problem in integration::integration_problems(&integration) {
-                        eprintln!("zajil: the browser extension: {problem}");
+                        eprintln!("alhami: the browser extension: {problem}");
                     }
                     *kept.lock().unwrap_or_else(|e| e.into_inner()) = Some(integration);
                 });
@@ -339,7 +339,7 @@ pub fn run() {
             tauri_app.add_capability(video::CAPABILITY)?;
             tauri_app.add_capability(batch::CAPABILITY)?;
             tauri_app.add_capability(grab::CAPABILITY)?;
-            // What a video run or a tools install left when Zajil stopped
+            // What a video run or a tools install left when ALHami stopped
             // (#149).
             {
                 let app = tauri_app.state::<App>();
@@ -393,7 +393,7 @@ pub fn run() {
                 }
                 return Ok(());
             }
-            // Is a newer Zajil out (#124)? In the background, once.
+            // Is a newer ALHami out (#124)? In the background, once.
             update::check_at_start(&handle);
             tauri::async_runtime::spawn(async move {
                 runner::run_queues(handle.clone()).await;
@@ -405,7 +405,7 @@ pub fn run() {
         .expect("the window opens")
         .run(|handle, event| match event {
             // The last window went because the main one was freed in the
-            // tray (`main_window.rs`): Zajil goes on. A quit has a code.
+            // tray (`main_window.rs`): ALHami goes on. A quit has a code.
             tauri::RunEvent::ExitRequested {
                 api, code: None, ..
             } if handle.state::<main_window::MainWindow>().freed() => {
@@ -758,7 +758,7 @@ fn in_scene<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) -> bool {
     }
 }
 
-/// The app on Tauri's mock runtime, for the tests: Zajil's own state and
+/// The app on Tauri's mock runtime, for the tests: ALHami's own state and
 /// commands on data folder `data`, and its main window, made from the
 /// configuration as at the start.
 #[cfg(test)]
@@ -837,7 +837,7 @@ mod tests {
             .expect("the installer's version");
         assert_eq!(
             line,
-            format!("zajil: starting (version {version}, process 42)")
+            format!("alhami: starting (version {version}, process 42)")
         );
     }
 

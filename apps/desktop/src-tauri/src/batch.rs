@@ -219,7 +219,7 @@ pub async fn open_batch<R: tauri::Runtime>(
         return Ok(());
     }
     *pending.0.lock().unwrap() = url;
-    crate::windows::open(&handle, LABEL, "Zajil", SIZE).map_err(|e| e.to_string())
+    crate::windows::open(&handle, LABEL, "ALHami", SIZE).map_err(|e| e.to_string())
 }
 
 /// The link the window starts with, once.

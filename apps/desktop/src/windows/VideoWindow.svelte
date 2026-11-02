@@ -137,7 +137,7 @@
     try {
       if (now) {
         await api.videoKeep(id, folder, name.trim(), queue || null);
-        await api.openProgress(id, name.trim() || "Zajil").catch(() => {});
+        await api.openProgress(id, name.trim() || "ALHami").catch(() => {});
       } else await api.videoLater(id, folder, name.trim(), queue || null);
       await api.closeWindow();
     } catch (e) {
@@ -262,7 +262,7 @@
   }
 
   /** A playlist: its chosen videos join the list at once, each at its
-   * best, and the window closes; Zajil asks each page and downloads it in
+   * best, and the window closes; ALHami asks each page and downloads it in
    * turn, and one that fails says why in the list. */
   async function downloadList(info: Extract<VideoInfoView, { kind: "playlist" }>, chosen: boolean[]) {
     const items = info.entries.filter((e, i) => chosen[i] && e.url && !e.playlist).map((e) => ({ url: e.url!, title: e.title }));

@@ -102,7 +102,7 @@ describe("the playlists a tab loads", () => {
     expect(api.session).toEqual({});
   });
 
-  it("nothing that is not a tab's, or not a link Zajil can download", async () => {
+  it("nothing that is not a tab's, or not a link ALHami can download", async () => {
     const api = browserWith();
     await note(api, hls("https://cdn.example/a.m3u8", { tabId: -1 }));
     await note(api, hls("https://user:pw@cdn.example/a.m3u8"));

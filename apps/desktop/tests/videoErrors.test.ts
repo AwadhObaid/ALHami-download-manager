@@ -26,7 +26,7 @@ describe("a video's failure", () => {
     expect(errorDetails(e)).toBe(e.message);
   });
 
-  it("needs no details where Zajil says it all", () => {
+  it("needs no details where ALHami says it all", () => {
     expect(errorKey({ kind: "drm", message: "protected" })).toBe("video-drm");
     expect(errorDetails({ kind: "drm", message: "protected" })).toBeNull();
     expect(errorDetails({ kind: "tools_missing", message: "x" })).toBeNull();

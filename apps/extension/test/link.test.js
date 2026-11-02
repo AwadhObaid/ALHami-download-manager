@@ -40,7 +40,7 @@ const flush = () => new Promise((r) => setTimeout(r, 10));
 const wanted = (extra = {}) => ({ type: "cookies_wanted", protocol_version: 1, ask: 7, url: "https://files.example.com/a.zip", ticket: "t-1", ...extra });
 const HOUR = 3600 * 1000;
 
-describe("the link to Zajil (M5)", () => {
+describe("the link to ALHami (M5)", () => {
   it("has one instance id per profile, made once", async () => {
     const { api } = fake();
     const first = await instanceId(api);
@@ -82,7 +82,7 @@ describe("the link to Zajil (M5)", () => {
     expect(reads).toHaveLength(1);
   });
 
-  it("forgets a ticket whose download Zajil did not take", async () => {
+  it("forgets a ticket whose download ALHami did not take", async () => {
     const { api } = fake();
     await rememberTicket(api, "t-1", "https://files.example.com/a.zip", undefined);
     await forgetTicket(api, "t-1");
@@ -90,7 +90,7 @@ describe("the link to Zajil (M5)", () => {
     await forgetTicket(api, "never");
   });
 
-  it("forgets a download Zajil says is done or removed, at once", async () => {
+  it("forgets a download ALHami says is done or removed, at once", async () => {
     const { api } = fake();
     const long = Date.now() - 2 * HOUR;
     await rememberTicket(api, "t-1", "https://files.example.com/a.zip", undefined, long);
@@ -99,7 +99,7 @@ describe("the link to Zajil (M5)", () => {
     expect(reply).toEqual({ type: "cookies", protocol_version: 1, ask: 3, cookies: null });
     expect((await answer(api, wanted())).cookies).toBeNull();
     expect((await answer(api, wanted({ ticket: "t-2" }))).cookies).toBe("sid=default");
-    // A download that reached Zajil a moment ago stays, listed or not.
+    // A download that reached ALHami a moment ago stays, listed or not.
     await rememberTicket(api, "t-3", "https://files.example.com/a.zip", undefined);
     await keepTickets(api, []);
     expect(await openTicket(api, "t-3", "https://files.example.com/a.zip", undefined)).toBe(true);

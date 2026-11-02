@@ -1,7 +1,7 @@
-//! Nothing half-written when Zajil is ended at the end of a Windows session
+//! Nothing half-written when ALHami is ended at the end of a Windows session
 //! (#81). Windows waits for the window to answer `WM_ENDSESSION`, and the
 //! process's own exit then took seconds while WebView2 came down, past
-//! what a shutdown waits. So once the downloads have stopped, Zajil ends
+//! what a shutdown waits. So once the downloads have stopped, ALHami ends
 //! its process at once (`zajil_platform::session::terminate`), but only after every write in
 //! progress is done: the stores' (queues, settings, categories) by their
 //! own lock files, the app's own files (`window.json`, `videos.json`) by
@@ -64,7 +64,7 @@ pub fn hold(data: &Path, deadline: Instant) -> (Held, Vec<&'static str>) {
             Ok(Some(file)) => files.push(file),
             Ok(None) => late.push(name),
             Err(err) => {
-                eprintln!("zajil: {name} could not be locked: {err}");
+                eprintln!("alhami: {name} could not be locked: {err}");
                 late.push(name);
             }
         }

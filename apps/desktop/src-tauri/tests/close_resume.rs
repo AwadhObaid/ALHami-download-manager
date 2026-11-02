@@ -4,7 +4,7 @@
 //! asking the app to close (SIGTERM on Linux and macOS, a window close on
 //! Windows, with `--close-quits`), and killing it, as if its 5 s had run
 //! out or it had crashed. And on Windows, closing the window without
-//! `--close-quits`: Zajil goes on in the tray, downloading (#109).
+//! `--close-quits`: ALHami goes on in the tray, downloading (#109).
 //!
 //! These need the app built by `tauri build`, so `cargo test` lists them as
 //! ignored; CI copies the built app aside (as `cargo test` rebuilds the
@@ -74,10 +74,10 @@ fn start(data: &Path) -> App {
     start_with(data, true)
 }
 
-/// `close_quits`: closing the window quits (`--close-quits`, as Zajil's
-/// own setting «Closing the window quits Zajil» but with no question):
-/// the tests ask Zajil to quit by closing its window on Windows. Without
-/// it, closing hides Zajil into the tray and the downloads go on (#109).
+/// `close_quits`: closing the window quits (`--close-quits`, as ALHami's
+/// own setting «Closing the window quits ALHami» but with no question):
+/// the tests ask ALHami to quit by closing its window on Windows. Without
+/// it, closing hides ALHami into the tray and the downloads go on (#109).
 fn start_with(data: &Path, close_quits: bool) -> App {
     start_with_env(data, close_quits, &[])
 }
@@ -120,7 +120,7 @@ fn start_with_env(data: &Path, close_quits: bool, env: &[(&str, &str)]) -> App {
     // The page has loaded: a build without its page would otherwise pass
     // (review of #45).
     wait_until("the window is ready", Duration::from_secs(60), || {
-        app.said("zajil: the window is ready")
+        app.said("alhami: the window is ready")
     });
     app
 }
@@ -139,15 +139,15 @@ fn close_cleanly(app: &mut App, how: Close, store: &QueueStore) {
     // Said every time, so the CI log shows how near the 5 s limit a close
     // usually is (#132).
     println!("closing took {took:?}");
-    let stopped = app.said("zajil: the downloads stopped; exiting");
-    // Windows session end: how much of it was Zajil's own, said before the
+    let stopped = app.said("alhami: the downloads stopped; exiting");
+    // Windows session end: how much of it was ALHami's own, said before the
     // check of the whole (#244: the seconds came before its hook).
     #[cfg(windows)]
     if matches!(how, Close::SessionEnd)
         && let Some(hook) = app.said_at("asked to stop (the Windows session is ending)")
     {
         println!(
-            "before Zajil's hook: {:?}; from it to the exit: {:?}",
+            "before ALHami's hook: {:?}; from it to the exit: {:?}",
             hook.saturating_duration_since(asked),
             exited.saturating_duration_since(hook)
         );
@@ -162,7 +162,7 @@ fn close_cleanly(app: &mut App, how: Close, store: &QueueStore) {
     );
     assert!(took < Duration::from_millis(4500), "closing took {took:?}");
     // Which path stopped the downloads at the end of a Windows session:
-    // Zajil's own hook (`zajil_platform::session`), or tao's handling that
+    // ALHami's own hook (`zajil_platform::session`), or tao's handling that
     // ends in `RunEvent::Exit` (both stop them the same way). Shown in the
     // CI log (the step runs with --nocapture; review of #59).
     #[cfg(windows)]
@@ -180,10 +180,10 @@ fn close_cleanly(app: &mut App, how: Close, store: &QueueStore) {
         // after WebView2 comes down (#81: that took seconds). Measured
         // from the app's own line, so PowerShell's start is not counted.
         assert!(
-            app.said("zajil: saved; terminating to finish the session end"),
+            app.said("alhami: saved; terminating to finish the session end"),
             "it did not say that everything was saved before ending"
         );
-        let ended = exited.duration_since(hook.expect("Zajil's own hook ran"));
+        let ended = exited.duration_since(hook.expect("ALHami's own hook ran"));
         println!("from the session end to the exit: {ended:?}");
         assert!(
             ended < Duration::from_millis(1500),
@@ -248,7 +248,7 @@ enum Close {
 /// Asks the app to close, and gives back when the request went out: the
 /// close is timed from there. For a session end, that is once PowerShell
 /// has started and compiled its sender, which on a busy runner took up to
-/// 12.3 s of a 12.4 s close (#258, #284) before any message reached Zajil.
+/// 12.3 s of a 12.4 s close (#258, #284) before any message reached ALHami.
 fn ask_to_close(child: &Child, how: Close) -> Instant {
     let pid = child.id().to_string();
     let asked = Instant::now();
@@ -298,7 +298,7 @@ fn send_session_end(pid: u32) -> (Instant, String) {
                 &format!(
                     "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; \
                      Add-Type -TypeDefinition 'using System; using System.Collections.Generic; using System.Runtime.InteropServices; \
-                     public static class ZajilSession {{ \
+                     public static class ALHamiSession {{ \
                        public delegate bool EnumProc(IntPtr h, IntPtr l); \
                        [DllImport(\"user32.dll\", CharSet = CharSet.Unicode)] public static extern int GetClassNameW(IntPtr h, System.Text.StringBuilder s, int n); \
                        [DllImport(\"user32.dll\", CharSet = CharSet.Unicode)] public static extern int GetWindowTextW(IntPtr h, System.Text.StringBuilder s, int n); \
@@ -317,7 +317,7 @@ fn send_session_end(pid: u32) -> (Instant, String) {
                          foreach (var h in all) Timed(\"WM_ENDSESSION\", h, 0x16, (IntPtr)1, 10000); \
                          Console.WriteLine(\"session end sent to \" + all.Count + \" top-level windows\"); if (all.Count == 0) Environment.Exit(1); }} }}'; \
                      [Console]::WriteLine('ready'); [void][Console]::In.ReadLine(); \
-                     [ZajilSession]::Send({pid})"
+                     [ALHamiSession]::Send({pid})"
                 ),
             ])
             .stdin(Stdio::piped())
@@ -478,7 +478,7 @@ fn killed_during_a_download_it_goes_on_when_opened_again() {
     close_in_the_middle_then_open_again(None);
 }
 
-/// Windows: closing the window during a download hides Zajil into the
+/// Windows: closing the window during a download hides ALHami into the
 /// tray; it keeps running and the download keeps going (owner's decision
 /// after #105, #109).
 #[cfg(windows)]
@@ -512,14 +512,14 @@ fn closing_the_window_keeps_the_download_going() {
     );
     assert!(
         app.child.try_wait().expect("the app's status").is_none(),
-        "closing the window ended Zajil"
+        "closing the window ended ALHami"
     );
-    assert!(!app.said("zajil: the downloads stopped; exiting"));
+    assert!(!app.said("alhami: the downloads stopped; exiting"));
 }
 
 /// Windows: the session ends while «Download complete» is open (#244: the
-/// close took 14.7 s once with a sixth window open). Every window of Zajil
-/// answers both messages at once, as a shutdown waits for each, and Zajil
+/// close took 14.7 s once with a sixth window open). Every window of ALHami
+/// answers both messages at once, as a shutdown waits for each, and ALHami
 /// ends quickly.
 #[cfg(windows)]
 #[test]
@@ -563,7 +563,7 @@ fn session_end_with_download_complete_open_is_answered_at_once() {
         .collect();
     assert!(slow.is_empty(), "windows answered late: {slow:#?}");
     assert!(status.success(), "it ended with {status:?}");
-    assert!(app.said("zajil: saved; terminating to finish the session end"));
+    assert!(app.said("alhami: saved; terminating to finish the session end"));
 }
 
 /// A download going, with the app started so that it closes its main window
@@ -607,7 +607,7 @@ fn start_closing_into_the_tray(
 }
 
 /// Closed into the tray, the main window is freed with its page (owner's
-/// request for 1.2.3: the page took most of Zajil's memory), the download
+/// request for 1.2.3: the page took most of ALHami's memory), the download
 /// goes on without it, and shown again the window is made again, its page
 /// reading the list and everything again. Not on Linux: CI's desktop has
 /// no tray, and closing quits there (`closing.rs`); the same code runs.
@@ -617,7 +617,7 @@ fn start_closing_into_the_tray(
 fn the_main_window_is_freed_in_the_tray_and_comes_back() {
     let (server, _data, downloads, store, mut app) = start_closing_into_the_tray(49, 3, 12);
     wait_until("the main window freed", Duration::from_secs(60), || {
-        app.said("zajil: the main window is freed while Zajil runs in the tray")
+        app.said("alhami: the main window is freed while ALHami runs in the tray")
     });
     let freed = recorded(&item(&store));
     // A small download that finishes meanwhile is said with no page: its
@@ -629,7 +629,7 @@ fn the_main_window_is_freed_in_the_tray_and_comes_back() {
         "a finished one said in the tray",
         Duration::from_secs(60),
         || {
-            app.said("zajil: in the tray: ")
+            app.said("alhami: in the tray: ")
                 && app.said("finished or failed (notifications on, sound Some(\"done\"))")
         },
     );
@@ -645,23 +645,23 @@ fn the_main_window_is_freed_in_the_tray_and_comes_back() {
     );
     assert!(
         app.child.try_wait().expect("the app's status").is_none(),
-        "freeing the window ended Zajil"
+        "freeing the window ended ALHami"
     );
-    assert!(!app.said("zajil: the downloads stopped; exiting"));
+    assert!(!app.said("alhami: the downloads stopped; exiting"));
     // Shown again: made again, and its page loads and reads the list.
     wait_until(
         "the main window made again",
         Duration::from_secs(60),
-        || app.said("zajil: the main window is made again"),
+        || app.said("alhami: the main window is made again"),
     );
     wait_until("its page ready again", Duration::from_secs(60), || {
-        app.said_times("zajil: the window is ready") == 2
+        app.said_times("alhami: the window is ready") == 2
     });
     assert!(app.child.try_wait().expect("the app's status").is_none());
 }
 
 /// Windows: the session ends while the main window is freed in the tray,
-/// so Zajil shows no window at all: its own hidden window hears the end,
+/// so ALHami shows no window at all: its own hidden window hears the end,
 /// and everything is saved before the process ends.
 #[cfg(windows)]
 #[test]
@@ -669,7 +669,7 @@ fn the_main_window_is_freed_in_the_tray_and_comes_back() {
 fn session_end_with_the_main_window_freed_saves_everything() {
     let (_server, _data, _downloads, store, mut app) = start_closing_into_the_tray(50, 3, 600);
     wait_until("the main window freed", Duration::from_secs(60), || {
-        app.said("zajil: the main window is freed while Zajil runs in the tray")
+        app.said("alhami: the main window is freed while ALHami runs in the tray")
     });
     wait_until("2 MiB recorded", Duration::from_secs(90), || {
         recorded(&item(&store)) >= 2 * MIB
@@ -678,12 +678,12 @@ fn session_end_with_the_main_window_freed_saves_everything() {
     let status = wait_exit(&mut app.child, Duration::from_secs(30));
     println!("{said}");
     assert!(
-        said.contains("ZajilSessionEnd"),
-        "Zajil's own window was not there"
+        said.contains("ALHamiSessionEnd"),
+        "ALHami's own window was not there"
     );
     assert!(status.success(), "it ended with {status:?}");
-    assert!(app.said("zajil: asked to stop (the Windows session is ending)"));
-    assert!(app.said("zajil: saved; terminating to finish the session end"));
+    assert!(app.said("alhami: asked to stop (the Windows session is ending)"));
+    assert!(app.said("alhami: saved; terminating to finish the session end"));
     let left = item(&store);
     assert_ne!(left.status, Status::Done);
     assert!(recorded(&left) >= 2 * MIB, "its progress was recorded");

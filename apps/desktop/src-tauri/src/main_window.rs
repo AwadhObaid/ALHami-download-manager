@@ -1,5 +1,5 @@
-//! The main window, freed while Zajil runs in the tray (owner's request for
-//! 1.2.3): its web page alone took most of Zajil's memory (about 170 MB of
+//! The main window, freed while ALHami runs in the tray (owner's request for
+//! 1.2.3): its web page alone took most of ALHami's memory (about 170 MB of
 //! WebView2 on Windows, against 20 MB for the program), for a window nobody
 //! sees. Closed into the tray (or the Dock), the window is destroyed, with
 //! the hidden windows made beforehand; the downloads go on without a page.
@@ -29,7 +29,7 @@ use crate::App;
 /// The main window's label, in the configuration.
 pub const LABEL: &str = "main";
 
-/// The main window's state while Zajil runs.
+/// The main window's state while ALHami runs.
 #[derive(Default)]
 pub struct MainWindow {
     /// Closed into the tray: hidden, to be freed.
@@ -45,7 +45,7 @@ pub struct MainWindow {
 }
 
 impl MainWindow {
-    /// Whether the main window was freed on purpose: Zajil goes on with no
+    /// Whether the main window was freed on purpose: ALHami goes on with no
     /// window at all, and must not quit for that.
     pub fn freed(&self) -> bool {
         self.freed.load(Ordering::SeqCst)
@@ -82,19 +82,19 @@ fn free<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
         return;
     };
     // Before the window goes: its going must not close the others, nor end
-    // Zajil (`windows::close_with_main`, `lib.rs`).
+    // ALHami (`windows::close_with_main`, `lib.rs`).
     state.freed.store(true, Ordering::SeqCst);
     // The next page is a first one again: it makes the spare windows, and
     // the CI's checks read its «ready».
     app.page_ready.store(false, Ordering::SeqCst);
     crate::windows::drop_spares(handle);
-    // What the page said, Zajil says meanwhile (`in_tray.rs`).
+    // What the page said, ALHami says meanwhile (`in_tray.rs`).
     crate::in_tray::start(handle);
     match main.destroy() {
-        Ok(()) => eprintln!("zajil: the main window is freed while Zajil runs in the tray"),
+        Ok(()) => eprintln!("alhami: the main window is freed while ALHami runs in the tray"),
         Err(err) => {
             state.freed.store(false, Ordering::SeqCst);
-            eprintln!("zajil: the main window could not be freed: {err}");
+            eprintln!("alhami: the main window could not be freed: {err}");
         }
     }
 }
@@ -145,7 +145,7 @@ pub fn show<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
     let handle = handle.clone();
     tauri::async_runtime::spawn(async move {
         if let Err(err) = make(&handle).await {
-            eprintln!("zajil: the main window could not be made again: {err}");
+            eprintln!("alhami: the main window could not be made again: {err}");
         }
         handle
             .state::<MainWindow>()
@@ -180,7 +180,7 @@ async fn make<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) -> tauri::Result<
     crate::windows::close_with_main(handle);
     crate::shutdown::hook_main(handle);
     let _ = window.set_focus();
-    eprintln!("zajil: the main window is made again");
+    eprintln!("alhami: the main window is made again");
     Ok(())
 }
 
@@ -226,7 +226,7 @@ mod tests {
     // `the_main_window_is_freed_in_the_tray_and_comes_back`.
 
     /// Closed into the tray, the main window is freed, unless a window it
-    /// owns is open; and not while Zajil quits.
+    /// owns is open; and not while ALHami quits.
     #[test]
     fn the_main_window_is_freed_unless_a_window_it_owns_is_open() {
         let data = tempfile::tempdir().unwrap();
@@ -246,7 +246,7 @@ mod tests {
         state.owned.lock().unwrap().clear();
         handle.state::<App>().exiting.store(true, Ordering::SeqCst);
         free(&handle);
-        assert!(!state.freed(), "freed while Zajil quits");
+        assert!(!state.freed(), "freed while ALHami quits");
 
         handle.state::<App>().exiting.store(false, Ordering::SeqCst);
         handle

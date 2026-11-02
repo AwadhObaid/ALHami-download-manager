@@ -25,7 +25,7 @@ notifications: boolean,
  */
 clipboard: boolean, 
 /**
- * Look for a newer Zajil at start (#124).
+ * Look for a newer ALHami at start (#124).
  */
 update_check: boolean, 
 /**

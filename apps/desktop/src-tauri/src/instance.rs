@@ -1,10 +1,10 @@
-//! One Zajil per user: a second start asks the running one to show its
+//! One ALHami per user: a second start asks the running one to show its
 //! window (#60).
 
 use std::path::Path;
 use std::time::Duration;
 
-/// Whether a Zajil already runs on the data folder `data`: then it is
+/// Whether a ALHami already runs on the data folder `data`: then it is
 /// asked, over its private channel, to show its window (#60). On macOS and
 /// Linux the channel is a socket in a folder of the data folder that only
 /// this user owns and can enter (checked at every connect); on Windows the
@@ -21,7 +21,7 @@ pub(crate) fn show_running(data: &Path) -> bool {
     if zajil_host::write_json(&mut stream, &ask).is_err() {
         return false;
     }
-    // A Zajil that answered is there, whatever it said; one that does not
+    // A ALHami that answered is there, whatever it said; one that does not
     // answer in time is there too (it holds the channel).
     let (done, wait) = std::sync::mpsc::channel();
     std::thread::spawn(move || {
@@ -35,7 +35,7 @@ pub(crate) fn show_running(data: &Path) -> bool {
 mod tests {
     use super::*;
 
-    /// #60: Zajil started again on a data folder where it runs asks the
+    /// #60: ALHami started again on a data folder where it runs asks the
     /// running one, over its channel, to show its window, and says so; on
     /// a folder where nothing runs, it starts.
     #[test]

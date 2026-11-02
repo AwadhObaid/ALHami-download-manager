@@ -173,12 +173,12 @@ const ARABIC: &[(&str, [&str; 6])] = &[
     (
         "quit-question",
         [
-            "لا تحميلات تعمل الآن. هل تُنهي زاجِل؟",
-            "يعمل الآن تحميل واحد. هل تُنهي زاجِل؟",
-            "يعمل الآن تحميلان. هل تُنهي زاجِل؟",
-            "يعمل الآن 3 تحميلات. هل تُنهي زاجِل؟",
-            "يعمل الآن 11 تحميلًا. هل تُنهي زاجِل؟",
-            "يعمل الآن 100 تحميل. هل تُنهي زاجِل؟",
+            "لا تحميلات تعمل الآن. هل تُنهي الحامي؟",
+            "يعمل الآن تحميل واحد. هل تُنهي الحامي؟",
+            "يعمل الآن تحميلان. هل تُنهي الحامي؟",
+            "يعمل الآن 3 تحميلات. هل تُنهي الحامي؟",
+            "يعمل الآن 11 تحميلًا. هل تُنهي الحامي؟",
+            "يعمل الآن 100 تحميل. هل تُنهي الحامي؟",
         ],
     ),
     (
@@ -361,8 +361,8 @@ const ENGLISH: &[(&str, [&str; 2])] = &[
     (
         "quit-question",
         [
-            "1 download is running. Quit Zajil?",
-            "2 downloads are running. Quit Zajil?",
+            "1 download is running. Quit ALHami?",
+            "2 downloads are running. Quit ALHami?",
         ],
     ),
     ("import-done", ["1 download added.", "2 downloads added."]),
@@ -1197,8 +1197,8 @@ const WHOLE_TEXTS: &[Whole] = &[
     },
     Whole {
         key: "about-text",
-        ar: (&[("version", "VERSION")], "زاجِل، الإصدار VERSION"),
-        en: (&[("version", "VERSION")], "Zajil, version VERSION"),
+        ar: (&[("version", "VERSION")], "الحامي، الإصدار VERSION"),
+        en: (&[("version", "VERSION")], "ALHami, version VERSION"),
     },
     Whole {
         key: "col-resize",
@@ -1304,11 +1304,11 @@ const WHOLE_TEXTS: &[Whole] = &[
         key: "tool-license-yt-dlp",
         ar: (
             &[("binary", "GPLv3+"), ("source", "Unlicense")],
-            "GPLv3+ للملف الذي ينزّله زاجِل (والكود المصدري بترخيص Unlicense)",
+            "GPLv3+ للملف الذي ينزّله الحامي (والكود المصدري بترخيص Unlicense)",
         ),
         en: (
             &[("binary", "GPLv3+"), ("source", "Unlicense")],
-            "GPLv3+ for the file Zajil downloads (its source code: Unlicense)",
+            "GPLv3+ for the file ALHami downloads (its source code: Unlicense)",
         ),
     },
     Whole {
@@ -1342,7 +1342,7 @@ const WHOLE_TEXTS: &[Whole] = &[
                 ("license", "LICENSE"),
                 ("source", "SOURCE"),
             ],
-            "yt-dlp VERSION، بترخيص BINARY للملف الذي ينزّله زاجِل (والكود المصدري بترخيص LICENSE). مصدره: SOURCE",
+            "yt-dlp VERSION، بترخيص BINARY للملف الذي ينزّله الحامي (والكود المصدري بترخيص LICENSE). مصدره: SOURCE",
         ),
         en: (
             &[
@@ -1352,7 +1352,7 @@ const WHOLE_TEXTS: &[Whole] = &[
                 ("license", "LICENSE"),
                 ("source", "SOURCE"),
             ],
-            "yt-dlp VERSION, under the BINARY for the file Zajil downloads (its source code: LICENSE). Its source: SOURCE",
+            "yt-dlp VERSION, under the BINARY for the file ALHami downloads (its source code: LICENSE). Its source: SOURCE",
         ),
     },
     Whole {

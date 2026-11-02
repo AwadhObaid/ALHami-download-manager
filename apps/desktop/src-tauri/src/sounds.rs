@@ -1,4 +1,4 @@
-//! Which sounds Zajil plays (M5.5, an IDM touch): when a download
+//! Which sounds ALHami plays (M5.5, an IDM touch): when a download
 //! finishes, when one fails, and when a queue finishes. The page plays
 //! them (tones it makes itself, no sound files); these are the user's
 //! choices, kept with the window preferences (`window.json`). At first
@@ -89,7 +89,7 @@ pub fn play<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, sound: Sound) {
                 tokio::time::sleep(AT_MOST).await;
                 let _ = window.destroy();
             }
-            Err(err) => eprintln!("zajil: no sound: {err}"),
+            Err(err) => eprintln!("alhami: no sound: {err}"),
         }
     });
 }

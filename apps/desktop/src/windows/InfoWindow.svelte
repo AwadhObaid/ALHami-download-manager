@@ -14,7 +14,7 @@
   // The «Download file info» window: asks the server about the link, then
   // adds the download as the user says, and closes. Closing it gives up a
   // check still running (Rust). A download from the browser has a window
-  // of its own (`offers.rs`): Zajil asks the server with the browser's
+  // of its own (`offers.rs`): ALHami asks the server with the browser's
   // cookies, and the window waits for that answer.
   let url = $state("");
   let offer: number | null = null;
@@ -110,7 +110,7 @@
     if (busy || added) return;
     busy = true;
     error = null;
-    // A browser's download is added once Zajil has its answer; one started
+    // A browser's download is added once ALHami has its answer; one started
     // in the background meanwhile is placed, not added again.
     if (offer !== null) await answered;
     await starting;

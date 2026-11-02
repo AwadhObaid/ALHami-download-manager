@@ -187,7 +187,7 @@ pub(crate) fn menu_target<'a>(command: &str, front: &'a str) -> &'a str {
     }
 }
 
-/// The program's version, for «About Zajil».
+/// The program's version, for «About ALHami».
 #[tauri::command]
 pub(crate) fn app_version<R: tauri::Runtime>(handle: tauri::AppHandle<R>) -> String {
     handle.package_info().version.to_string()

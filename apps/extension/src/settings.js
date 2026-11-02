@@ -2,7 +2,7 @@
 // What the extension captures, and the keys of a click, kept in
 // `storage.local`.
 
-/** The file types captured by default: Zajil's built-in categories
+/** The file types captured by default: ALHami's built-in categories
  * (`zajil_core::category::CategoriesFile::built_in`). */
 export const DEFAULT_EXTENSIONS = [
   "exe", "msi", "msix", "msu", "dmg", "pkg", "deb", "rpm", "appimage", "apk", "flatpak", "iso", "img", "bin",
@@ -15,7 +15,7 @@ export const DEFAULT_EXTENSIONS = [
   "r00", "r01", "r02", "r03", "r04", "r05", "r06", "r07", "r08", "r09", "r10", "r11", "r12", "r13", "r14", "r15", "r16", "r17", "r18", "r19",
 ];
 
-/** A file larger than this goes to Zajil whatever its type, by default
+/** A file larger than this goes to ALHami whatever its type, by default
  * (owner's decision, 2026-10-27: on from the start, 5 MB). */
 export const DEFAULT_BIG_FILE_MB = 5;
 /** The largest size the setting takes, in MB. */
@@ -23,21 +23,21 @@ export const MAX_BIG_FILE_MB = 100000;
 
 /**
  * @typedef {object} Settings
- * @property {boolean} capture Downloads of the listed types go to Zajil.
+ * @property {boolean} capture Downloads of the listed types go to ALHami.
  * @property {string[]} extensions File types captured, lower case, no dot.
- * @property {boolean} bigFiles A file larger than `bigFileMb` goes to Zajil
+ * @property {boolean} bigFiles A file larger than `bigFileMb` goes to ALHami
  *   too, whatever its type, when the browser knows its size.
- * @property {number} bigFileMb That size, in MB of 1,048,576 bytes (as Zajil shows sizes), a whole
+ * @property {number} bigFileMb That size, in MB of 1,048,576 bytes (as ALHami shows sizes), a whole
  *   number from 1 to `MAX_BIG_FILE_MB`.
  * @property {string[]} excludedSites Sites whose downloads stay in the
  *   browser: a host and its subdomains.
  * @property {boolean} useKeys The keys of a click are in use: off by
  *   default, as in other download managers; the user turns them on (owner's decision).
  * @property {string | null} sendKeys The keys that, held while clicking a
- *   link, send it to Zajil (one of `KEY_CHOICES`); null: this system's
+ *   link, send it to ALHami (one of `KEY_CHOICES`); null: this system's
  *   default (`defaultKeys`).
  * @property {string | null} browserKeys The keys that leave a clicked
- *   link to the browser, which then downloads it without Zajil taking it;
+ *   link to the browser, which then downloads it without ALHami taking it;
  *   null: this system's default.
  */
 
@@ -53,7 +53,7 @@ export function isMac(nav) {
   return /^mac/i.test(nav.userAgentData?.platform || nav.platform || "");
 }
 
-/** The owner's defaults: Ctrl+click sends to Zajil and Alt+click leaves it
+/** The owner's defaults: Ctrl+click sends to ALHami and Alt+click leaves it
  * to the browser on Windows and Linux; on a Mac, Option+click and
  * Option+Shift+click. @param {boolean} mac */
 export function defaultKeys(mac) {
@@ -61,7 +61,7 @@ export function defaultKeys(mac) {
 }
 
 /** The keys in force: the stored ones, else this system's; the browser's
- * keys off when they are the same as Zajil's.
+ * keys off when they are the same as ALHami's.
  * @param {Pick<Settings, "sendKeys" | "browserKeys">} settings @param {boolean} mac */
 export function clickKeys(settings, mac) {
   const base = defaultKeys(mac);

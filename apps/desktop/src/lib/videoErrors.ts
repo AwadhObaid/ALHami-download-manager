@@ -20,8 +20,8 @@ export function errorKey(e: VideoErrorView | string): string {
   return (typeof e === "string" ? undefined : SENTENCE[e.kind]) ?? "video-error-other";
 }
 
-/** The words under «Details»: yt-dlp's (or Zajil's) own text, but not
- * for what Zajil itself says whole (DRM, the tools). */
+/** The words under «Details»: yt-dlp's (or ALHami's) own text, but not
+ * for what ALHami itself says whole (DRM, the tools). */
 export function errorDetails(e: VideoErrorView | string): string | null {
   if (typeof e === "string") return e.trim() || null;
   if (e.kind === "drm" || e.kind === "tools_missing") return null;

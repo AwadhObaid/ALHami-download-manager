@@ -2,10 +2,10 @@
   import Icon from "./Icon.svelte";
   import { locale } from "../i18n.svelte";
 
-  // «A new version of Zajil is available» (#124): a bar at the top of the
+  // «A new version of ALHami is available» (#124): a bar at the top of the
   // main window that does not stop the work. With a signed update
   // (ADR-0011): «Update now» installs it (the downloads save their progress
-  // and Zajil opens again); else the release page opens from Rust
+  // and ALHami opens again); else the release page opens from Rust
   // (`onopen`), never from a link in the page. «Skip this version» hides
   // it for good, closing until the next start.
   let {

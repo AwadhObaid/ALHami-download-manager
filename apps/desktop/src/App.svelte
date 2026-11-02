@@ -711,7 +711,7 @@ import { patchRows } from "./lib/progressRows";
 
   // «About»: the version, and the video tools (`lib/about.ts`); and «Copy
   // problem info» for a report (owner's decision, 2026-10-31: copied, never
-  // sent by Zajil).
+  // sent by ALHami).
   async function about() {
     const version = await api.appVersion().catch(() => "");
     const tools = await api.videoToolsStatus().catch(() => []);

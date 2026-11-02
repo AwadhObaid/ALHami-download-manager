@@ -2,7 +2,7 @@
   import { lucide } from "../lucide";
   import ColorIcon from "./ColorIcon.svelte";
 
-  // Simple line icons drawn for Zajil (not taken from any other program),
+  // Simple line icons drawn for ALHami (not taken from any other program),
   // and Lucide's (M5.5, `../lucide.ts`, ISC) by their Lucide names.
   const paths: Record<string, string> = {
     plus: '<path d="M12 5v14M5 12h14"/>',
@@ -33,7 +33,7 @@
   };
   let { name, size = 18, stroke = 1.8 }: { name: string; size?: number; stroke?: number } = $props();
 
-  // The pictures are drawn in Zajil's coloured set (`ColorIcon`, the
+  // The pictures are drawn in ALHami's coloured set (`ColorIcon`, the
   // owner's request: no thin outline icons left); the controls (arrows,
   // chevrons, close, search, the window's buttons) and the glyphs on a
   // button's own colour stay lines.

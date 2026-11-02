@@ -57,7 +57,7 @@ async function draw(win: string | null) {
 // settings are read now; it is drawn when it takes a role and shows.
 if (asked === "sound") {
   // A sound while the main window is freed in the tray (`sounds.rs`): only
-  // the tones, in a window never shown, which Zajil closes.
+  // the tones, in a window never shown, which ALHami closes.
   const sound = new URLSearchParams(location.search).get("sound");
   if (sound === "done" || sound === "failed" || sound === "queue") play(sound as Sound);
 } else if (asked === "spare") {

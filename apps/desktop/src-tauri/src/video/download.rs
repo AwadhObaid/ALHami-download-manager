@@ -195,15 +195,15 @@ pub(super) fn start<R: tauri::Runtime>(handle: tauri::AppHandle<R>, id: u64, ask
                 progressed(&events, id, done, total, speed);
             }
             // A part saved before was of another file: said in the list.
-            VideoEvent::Note(note) => eprintln!("zajil: video {id}: {note}"),
+            VideoEvent::Note(note) => eprintln!("alhami: video {id}: {note}"),
             VideoEvent::StartedOver(why) => {
-                eprintln!("zajil: video {id}: {why}");
+                eprintln!("alhami: video {id}: {why}");
                 with_row(&events.state::<VideoState>(), id, |row| {
                     row.error = Some(why)
                 });
             }
         };
-        // Stopped before, Zajil's own way: continued from its parts with
+        // Stopped before, ALHami's own way: continued from its parts with
         // the links saved there, without asking the page again (no yt-dlp,
         // which YouTube may stop without the browser's cookies).
         let saved_ids = match &row.choice {
@@ -255,7 +255,7 @@ pub(super) fn start<R: tauri::Runtime>(handle: tauri::AppHandle<R>, id: u64, ask
                         .map_err(Some),
                     };
                     eprintln!(
-                        "zajil: video {id}: its page {} in {} ms",
+                        "alhami: video {id}: its page {} in {} ms",
                         match (read_used, had_ahead) {
                             (true, _) => "was read ahead",
                             (false, true) => "read ahead did not fit, read again",
@@ -295,7 +295,7 @@ pub(super) fn start<R: tauri::Runtime>(handle: tauri::AppHandle<R>, id: u64, ask
                     let chosen = formats.and_then(|formats| {
                         let wanted = still_offered(&row.choice, &formats);
                         if wanted != row.choice {
-                            eprintln!("zajil: video {id}: its format is gone, the best goes");
+                            eprintln!("alhami: video {id}: its format is gone, the best goes");
                             row.choice = wanted;
                         }
                         let choice = row.choice.resolved(&formats)?;
@@ -401,7 +401,7 @@ pub(super) fn start<R: tauri::Runtime>(handle: tauri::AppHandle<R>, id: u64, ask
                     }
                     // Left where it is, and said.
                     Ok(Err((e, file))) => {
-                        eprintln!("zajil: video {id} could not be moved: {e}");
+                        eprintln!("alhami: video {id} could not be moved: {e}");
                         Ok(file)
                     }
                     Err(e) => Err(VideoErrorView {
@@ -436,7 +436,7 @@ pub(super) fn start<R: tauri::Runtime>(handle: tauri::AppHandle<R>, id: u64, ask
             }
             Err(e) => {
                 // Its kind only: yt-dlp's words may hold the page's link.
-                eprintln!("zajil: video {id} failed ({})", e.kind);
+                eprintln!("alhami: video {id} failed ({})", e.kind);
                 row.status = StatusView::Failed;
                 row.error = Some(e.text(lang));
             }

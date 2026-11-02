@@ -149,7 +149,7 @@ pub async fn video_probe(
             .filter(|f| format_view(f).kind != "audio")
             .count();
         eprintln!(
-            "zajil: read from {}: {} formats, {pictures} with a picture",
+            "alhami: read from {}: {} formats, {pictures} with a picture",
             if sent.url == url {
                 "the page"
             } else {
@@ -182,7 +182,7 @@ pub async fn video_probe(
                 )
             })
             .collect();
-        eprintln!("zajil: the formats: {}", each.join(", "));
+        eprintln!("alhami: the formats: {}", each.join(", "));
     }
     let read = sent.url;
     Ok(match sent.probed {

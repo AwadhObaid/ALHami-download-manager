@@ -1,7 +1,7 @@
 //! Downloads from the browser, as in IDM (the owner's notes on 1.0): each
 //! one opens «Download file info» on its own, above every window and in
 //! the middle of the screen, without the main window. The window opens at
-//! once, saying it is asking the server, and fills in when Zajil has
+//! once, saying it is asking the server, and fills in when ALHami has
 //! reached the file. «Start download» there is the user's OK for a file
 //! that can run code, under the name the window showed, so it is not held
 //! again (`ok_given`). The setting
@@ -10,7 +10,7 @@
 //! asks.
 //!
 //! The extension is answered once the file is reached, as before (review
-//! of #70): a file Zajil cannot reach stays with the browser, and its
+//! of #70): a file ALHami cannot reach stays with the browser, and its
 //! window closes.
 
 use std::collections::HashMap;
@@ -27,7 +27,7 @@ use crate::extension::{FromPage, add_from_page, extension_reach, from_page, reac
 use crate::view::ProbeView;
 use crate::windows::{self, InfoStart};
 
-/// What «Download file info» of a browser's download learns once Zajil
+/// What «Download file info» of a browser's download learns once ALHami
 /// has reached the file.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, TS)]
 #[ts(export)]
@@ -160,13 +160,13 @@ fn offer<R: tauri::Runtime>(
     let n = offers.insert(page.clone());
     open_window(handle, n, &page.url, lang).map_err(|err| {
         offers.remove(n);
-        format!("Zajil cannot show it: {err}")
+        format!("ALHami cannot show it: {err}")
     })?;
     Ok(n)
 }
 
 /// A download from the browser (`serve_extension`, on its own thread): its
-/// window opens at once, then Zajil reaches the file and answers the
+/// window opens at once, then ALHami reaches the file and answers the
 /// extension. `drive_cookies`: as in `from_extension_with`.
 pub(crate) fn from_browser<R: tauri::Runtime>(
     handle: &tauri::AppHandle<R>,
@@ -180,9 +180,9 @@ pub(crate) fn from_browser<R: tauri::Runtime>(
         None => return zajil_host::Response::refused("not a download"),
     };
     let app = handle.state::<App>();
-    // A quitting Zajil takes nothing new: the browser keeps it.
+    // A quitting ALHami takes nothing new: the browser keeps it.
     if app.exiting.load(Ordering::SeqCst) {
-        return zajil_host::Response::refused("Zajil is closing");
+        return zajil_host::Response::refused("ALHami is closing");
     }
     let prefs = handle.state::<Closing>().prefs().add;
     // The window first, so the user sees it while the server is asked.
@@ -231,7 +231,7 @@ pub(crate) fn from_browser<R: tauri::Runtime>(
                 if let Err(err) =
                     crate::addprefs::show_started(handle, prefs.progress_window, id, &probe.name)
                 {
-                    eprintln!("zajil: the progress window of download {id}: {err}");
+                    eprintln!("alhami: the progress window of download {id}: {err}");
                 }
                 zajil_host::Response::ok()
             }
@@ -261,7 +261,7 @@ pub(crate) fn from_browser<R: tauri::Runtime>(
     zajil_host::Response::ok()
 }
 
-/// What Zajil learned of offer `offer`'s file, once it has reached it.
+/// What ALHami learned of offer `offer`'s file, once it has reached it.
 #[tauri::command]
 pub async fn offer_answer(offers: State<'_, Offers>, offer: u64) -> Result<OfferView, String> {
     let mut answer = {

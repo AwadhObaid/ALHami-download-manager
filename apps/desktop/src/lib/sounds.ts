@@ -1,4 +1,4 @@
-// Zajil's sounds (M5.5, an IDM touch): short tones it makes itself with
+// ALHami's sounds (M5.5, an IDM touch): short tones it makes itself with
 // Web Audio, no sound files (so no one else's license): two rising notes
 // when a download finishes, one low note when one fails, three when a
 // queue finishes. Which ones play is the user's choice (the settings).

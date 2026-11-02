@@ -163,7 +163,7 @@ pub(crate) async fn proxy_setting(app: State<'_, App>) -> Result<Option<String>,
         .map_err(blocking_err)
 }
 
-/// Sets the proxy (`None` or empty: none). It applies when Zajil next
+/// Sets the proxy (`None` or empty: none). It applies when ALHami next
 /// starts: every download then goes through it.
 #[tauri::command]
 pub(crate) async fn set_proxy(app: State<'_, App>, proxy: Option<String>) -> Result<(), String> {

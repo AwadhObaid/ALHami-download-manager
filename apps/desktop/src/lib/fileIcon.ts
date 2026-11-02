@@ -1,4 +1,4 @@
-// Which of Zajil's coloured icons (`components/ColorIcon.svelte`) a file
+// Which of ALHami's coloured icons (`components/ColorIcon.svelte`) a file
 // gets: by its category, or by its name's extension where none is known.
 
 /** The icon of category `id` (`null`: none). */

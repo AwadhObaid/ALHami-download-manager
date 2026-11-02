@@ -5,7 +5,7 @@
   import Icon from "./Icon.svelte";
   import { locale } from "../i18n.svelte";
 
-  // The browser extension is older than this Zajil needs (owner's request,
+  // The browser extension is older than this ALHami needs (owner's request,
   // 2026-10-31): it does not update itself. A bar at the top of the main
   // window, as the update's; «How to update it» opens the newest release's
   // page from Rust. Closed, it stays hidden until the next start.

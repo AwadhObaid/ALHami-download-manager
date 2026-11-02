@@ -59,7 +59,7 @@ describe("the video button's list", () => {
 
   // A video with its own sound and an AI dub, in the same itags (owner's
   // request, 2026-10-31): the list offers the sound's language, the
-  // video's own first, and a dub goes with its language to Zajil.
+  // video's own first, and a dub goes with its language to ALHami.
   it("offers a dub's language, and sends it with the dub's sound", () => {
     const own = { name: "English (US) original", main: true, lang: "en-US.4" };
     const dub = { name: "العربية", main: false, lang: "ar.3" };
@@ -101,7 +101,7 @@ describe("the video button's list", () => {
 
   // YouTube marks the dub in the viewer's language as the default (owner's
   // report, 2026-10-31: an Arabic dub chosen came as English): a language
-  // chosen goes with its name to Zajil all the same.
+  // chosen goes with its name to ALHami all the same.
   it("sends a chosen dub's language even when YouTube marks that dub the default", () => {
     const own = { name: "English (United States) original", main: false, lang: "en-US.4" };
     const dub = { name: "Arabic", main: true, lang: "ar.3" };

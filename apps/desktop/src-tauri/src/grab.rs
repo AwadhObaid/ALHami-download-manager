@@ -374,7 +374,7 @@ pub async fn open_grab<R: tauri::Runtime>(
         return Ok(());
     }
     *state.pending.lock().unwrap() = url;
-    crate::windows::open(&handle, LABEL, "Zajil", SIZE).map_err(|e| e.to_string())
+    crate::windows::open(&handle, LABEL, "ALHami", SIZE).map_err(|e| e.to_string())
 }
 
 /// The start link the window opens with, once.

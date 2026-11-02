@@ -20,7 +20,7 @@ function chromeId(key) {
 }
 
 describe("the manifests", () => {
-  it("give the fixed ids Zajil registers (owner's decision on #7)", () => {
+  it("give the fixed ids ALHami registers (owner's decision on #7)", () => {
     expect(chromeId(chrome.key)).toBe(rustConst(ids, "EXTENSION_ID_CHROMIUM").replaceAll('"', ""));
     expect(firefox.browser_specific_settings.gecko.id).toBe(rustConst(ids, "EXTENSION_ID_FIREFOX").replaceAll('"', ""));
     expect(firefox.key).toBeUndefined();
@@ -38,7 +38,7 @@ describe("the manifests", () => {
   it("ask for the same few permissions, and no site", () => {
     const wanted = ["downloads", "contextMenus", "nativeMessaging", "storage", "notifications"];
     // `downloads.ui` (Chrome and Edge only, no warning): the browser's
-    // download UI is hidden while a download goes to Zajil.
+    // download UI is hidden while a download goes to ALHami.
     expect([...chrome.permissions].sort()).toEqual([...wanted, "downloads.ui"].sort());
     expect([...firefox.permissions].sort()).toEqual([...wanted].sort());
     for (const m of [chrome, firefox]) {
@@ -85,7 +85,7 @@ describe("the protocol, as zajil-host has it", () => {
     expect(Number(rustConst(host, "MAX_NAME"))).toBe(MAX_NAME);
     expect(rustConst(host, "MAX_COOKIES")).toBe("16 * 1024");
     expect(MAX_COOKIES).toBe(16 * 1024);
-    // How Zajil says the server wanted a sign-in (`needsSignIn`).
+    // How ALHami says the server wanted a sign-in (`needsSignIn`).
     expect(read("../../../crates/zajil-core/src/engine/mod.rs")).toContain('#[error("the server answered {0}")]');
     // The host's own failures (#264): the same codes, each said here; and
     // "no answer" in words an extension of before the codes reads as such.

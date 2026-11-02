@@ -69,7 +69,7 @@ function aboutLine(say: Say, t: ToolView): string {
   }
 }
 
-/** The lines «About» adds for the video tools (none if Zajil has none). */
+/** The lines «About» adds for the video tools (none if ALHami has none). */
 export function toolLines(say: Say, tools: ToolView[]): string[] {
   const lines = tools.filter((t) => t.tool in NAMES).map((t) => aboutLine(say, t));
   if (lines.length === 0) return [];

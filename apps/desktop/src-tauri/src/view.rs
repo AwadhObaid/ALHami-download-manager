@@ -249,7 +249,7 @@ pub enum RefreshProblem {
     Cancelled,
     /// It has finished.
     Done,
-    /// Not a link Zajil takes; the reason, in English.
+    /// Not a link ALHami takes; the reason, in English.
     BadLink { reason: String },
     /// The server does not show it is the same file.
     NotTheSameFile {
@@ -345,7 +345,7 @@ pub struct SettingsView {
     pub notifications: bool,
     /// Clipboard monitoring: a copied download link opens the add dialog.
     pub clipboard: bool,
-    /// Look for a newer Zajil at start (#124).
+    /// Look for a newer ALHami at start (#124).
     pub update_check: bool,
     /// The sites with a connection limit of their own (#165).
     pub site_connections: Vec<SiteView>,

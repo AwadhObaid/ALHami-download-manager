@@ -19,7 +19,7 @@ use crate::{App, blocking_err, in_scene};
 /// `exe`'s real path (links resolved) must not be in a place that goes away
 /// when the program closes. From an AppImage (its mount, `.mount_…`, or
 /// `appimage`: `APPIMAGE` is set), the host beside it is copied to `fixed`
-/// in Zajil's data folder, and that copy is the one given to browsers,
+/// in ALHami's data folder, and that copy is the one given to browsers,
 /// kept the same as the AppImage's (#129, `native_host::fixed_copy`).
 /// macOS's App Translocation is still refused: the user moves the app. On
 /// Windows, a folder other users may change (a second drive, #334) gets
@@ -64,7 +64,7 @@ fn host_beside(exe: &Path, appimage: bool, fixed: &Path) -> Result<PathBuf, view
     if appimage {
         // The copy is checked instead (its folder, itself, its SHA-256).
         return zajil_platform::native_host::fixed_copy(&host, fixed).map_err(|err| {
-            eprintln!("zajil: the browsers' copy of zajil-host: {err}");
+            eprintln!("alhami: the browsers' copy of zajil-host: {err}");
             if err.kind() == std::io::ErrorKind::PermissionDenied {
                 Problem::Unsafe
             } else {
@@ -75,19 +75,19 @@ fn host_beside(exe: &Path, appimage: bool, fixed: &Path) -> Result<PathBuf, view
     let safe =
         |path: &Path| zajil_platform::fs::only_user_or_root_can_change(path).unwrap_or(false);
     if !safe(&host) || !safe(dir) {
-        // Windows: Zajil installed where other users may change files (a
+        // Windows: ALHami installed where other users may change files (a
         // second drive gives them that by default; a user's report on
-        // Brave, #334). The browsers are given a copy in Zajil's own
+        // Brave, #334). The browsers are given a copy in ALHami's own
         // folder, which only this user can change, kept the same as the
         // installed one, as for an AppImage.
         #[cfg(windows)]
         {
             eprintln!(
-                "zajil: other users may change {}: the browsers get a copy of zajil-host",
+                "alhami: other users may change {}: the browsers get a copy of zajil-host",
                 dir.display()
             );
             return zajil_platform::native_host::fixed_copy(&host, fixed).map_err(|err| {
-                eprintln!("zajil: the browsers' copy of zajil-host: {err}");
+                eprintln!("alhami: the browsers' copy of zajil-host: {err}");
                 Problem::Unsafe
             });
         }
@@ -98,7 +98,7 @@ fn host_beside(exe: &Path, appimage: bool, fixed: &Path) -> Result<PathBuf, view
 }
 
 /// Registers `zajil-host` with every supported browser for the current user
-/// (ADR-0005), each allowing only Zajil's extension: its fixed id in
+/// (ADR-0005), each allowing only ALHami's extension: its fixed id in
 /// Chrome, Chromium and Edge, its Firefox id in Firefox. One registration
 /// at a time in this program (the start and the settings button).
 pub(crate) fn integrate_browsers(data: &Path) -> view::IntegrationView {
@@ -186,7 +186,7 @@ pub(crate) fn integration_problems(integration: &view::IntegrationView) -> Vec<S
     match integration.host_problem {
         Some(Problem::Missing) => {
             return vec![
-                "zajil-host is not next to the program, so no browser can reach Zajil".into(),
+                "zajil-host is not next to the program, so no browser can reach ALHami".into(),
             ];
         }
         Some(Problem::Temporary) => {
@@ -249,7 +249,7 @@ mod tests {
     use super::*;
 
     /// M5: every browser is registered with `zajil-host`, each allowing
-    /// only Zajil's extension (its fixed id; the Firefox id in Firefox),
+    /// only ALHami's extension (its fixed id; the Firefox id in Firefox),
     /// and nothing is left when unregistered.
     #[test]
     fn every_browser_is_registered_for_zajil_s_extension_only() {
@@ -258,7 +258,7 @@ mod tests {
         let home = base.path().join("home");
         std::fs::create_dir_all(&home).unwrap();
         // A test registry root on Windows; only it, empty, may remain.
-        let root = format!(r"Software\ZajilDesktopTest-{}", std::process::id());
+        let root = format!(r"Software\ALHamiDesktopTest-{}", std::process::id());
         let registrar =
             SystemRegistrar::under(&home, &base.path().join("data/native-messaging"), &root);
         let host = base.path().join(if cfg!(windows) {
@@ -297,14 +297,14 @@ mod tests {
     }
 
     /// #129: from an AppImage, every browser is given the copy of
-    /// `zajil-host` in Zajil's data folder, never the mount that goes away.
+    /// `zajil-host` in ALHami's data folder, never the mount that goes away.
     #[cfg(unix)]
     #[test]
     fn from_an_appimage_browsers_are_given_the_lasting_copy() {
         use std::os::unix::fs::PermissionsExt;
         use zajil_platform::native_host::{Browser, FIXED_HOST_DIR};
         let base = tempfile::tempdir().unwrap();
-        let mount = base.path().join("tmp/.mount_ZajilXy34/usr/bin");
+        let mount = base.path().join("tmp/.mount_ALHamiXy34/usr/bin");
         std::fs::create_dir_all(&mount).unwrap();
         let exe = mount.join("zajil-desktop");
         std::fs::write(&exe, "app").unwrap();
@@ -332,7 +332,7 @@ mod tests {
             assert_eq!(manifest["path"], copy.to_str().unwrap(), "{browser:?}");
         }
         assert_eq!(std::fs::read(&copy).unwrap(), b"zajil-host");
-        // The mount goes away when Zajil closes; the copy stays.
+        // The mount goes away when ALHami closes; the copy stays.
         std::fs::remove_dir_all(base.path().join("tmp")).unwrap();
         assert!(copy.is_file());
     }
@@ -429,7 +429,7 @@ mod tests {
         // macOS moving the app aside: refused.
         let moved = base
             .path()
-            .join("AppTranslocation/X/Zajil.app/Contents/MacOS");
+            .join("AppTranslocation/X/ALHami.app/Contents/MacOS");
         std::fs::create_dir_all(&moved).unwrap();
         std::fs::write(moved.join("zajil-desktop"), "app").unwrap();
         assert_eq!(
@@ -438,7 +438,7 @@ mod tests {
         );
         // An AppImage's mount (#129): its host is copied to the fixed place,
         // and the copy is what browsers are given.
-        let mount = base.path().join(".mount_ZajilAb12/usr/bin");
+        let mount = base.path().join(".mount_ALHamiAb12/usr/bin");
         std::fs::create_dir_all(&mount).unwrap();
         let in_mount = mount.join("zajil-desktop");
         std::fs::write(&in_mount, "app").unwrap();

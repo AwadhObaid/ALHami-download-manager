@@ -1,14 +1,14 @@
 // @ts-check
-// The link to Zajil (M5, owner's decision on #7): after a restart Zajil asks
+// The link to ALHami (M5, owner's decision on #7): after a restart ALHami asks
 // this browser for the cookies of a download that came from it, while the
 // browser is open. The extension keeps a port to `zajil-host` open
-// (`runtime.connectNative`); the host passes Zajil's questions on it, one
+// (`runtime.connectNative`); the host passes ALHami's questions on it, one
 // at a time, and the answers back.
 //
-// The extension answers only for a download it sent to Zajil with cookies
+// The extension answers only for a download it sent to ALHami with cookies
 // itself and that is still open (owner's decision on #80): each such
 // download has a random ticket, kept with a hash of its site and its cookie
-// store (`storage.local`, never the cookies). Zajil asks by ticket, and
+// store (`storage.local`, never the cookies). ALHami asks by ticket, and
 // tells the extension which tickets are still open (`keep`): the others,
 // done or removed, are forgotten at once. 30 days is the most a ticket of
 // a download that never ends is kept.
@@ -20,17 +20,17 @@ import { cookieHeader } from "./cookies.js";
 export const TICKET_DAYS = 30;
 /** At most this many tickets are kept (the oldest go first). */
 export const MAX_TICKETS = 2000;
-/** A ticket this young is kept even if a `keep` does not list it: Zajil
+/** A ticket this young is kept even if a `keep` does not list it: ALHami
  * may have listed the open tickets just before this download reached it. */
 export const NEW_TICKET_MS = 60_000;
-/** The longest wait between two tries to link (Zajil's host missing, or
+/** The longest wait between two tries to link (ALHami's host missing, or
  * the browser closed it). */
 export const MAX_RETRY_MS = 60_000;
 
 /** An instance or cookie store id, as `zajil-host` accepts it. */
 const ID = /^[A-Za-z0-9_-]{1,64}$/;
 
-/** This extension's own random id: one per browser profile, so Zajil asks
+/** This extension's own random id: one per browser profile, so ALHami asks
  * the same browser again. Made once, kept in `storage.local`.
  * @param {any} browserApi
  * @returns {Promise<string>} */
@@ -42,7 +42,7 @@ export async function instanceId(browserApi) {
   return made;
 }
 
-/** A cookie store id that may go to Zajil: none (the default store), or a
+/** A cookie store id that may go to ALHami: none (the default store), or a
  * plain id; never a private window's.
  * @param {unknown} store */
 export function plainStore(store) {
@@ -72,7 +72,7 @@ async function siteKey(url, store) {
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-/** `noStrict`: its link came from another site's page with Zajil's keys,
+/** `noStrict`: its link came from another site's page with ALHami's keys,
  * so no `SameSite=Strict` cookie goes with it (`cookieHeader`).
  * @typedef {Record<string, { site: string, at: number, noStrict?: boolean }>} Tickets */
 
@@ -90,8 +90,8 @@ function fresh(all, now) {
   return Object.fromEntries(kept.slice(0, MAX_TICKETS));
 }
 
-/** Remembers that download `ticket` went to Zajil with the cookies of
- * `url`'s site from `store`: Zajil may ask for them again while it is open.
+/** Remembers that download `ticket` went to ALHami with the cookies of
+ * `url`'s site from `store`: ALHami may ask for them again while it is open.
  * @param {any} browserApi @param {string} ticket @param {string} url
  * @param {string | undefined} store @param {number} [now]
  * @param {{ noStrict?: boolean }} [how] */
@@ -106,7 +106,7 @@ export async function rememberTicket(browserApi, ticket, url, store, now = Date.
 /** The addresses a download's link leads to that are another origin of
  * the same site, by the origin of the link: a Google Drive file's page is
  * downloaded from Drive's download address (owner's decision on the Drive
- * links: Zajil asks for that address's own cookies, never another site's). */
+ * links: ALHami asks for that address's own cookies, never another site's). */
 const SAME_SITE_DOWNLOADS = /** @type {Record<string, string[]>} */ ({
   "https://drive.usercontent.google.com": ["https://drive.google.com"],
 });
@@ -132,7 +132,7 @@ async function ticketFor(browserApi, ticket, url, store, now = Date.now()) {
   return null;
 }
 
-/** Forgets `ticket`: Zajil did not take its download.
+/** Forgets `ticket`: ALHami did not take its download.
  * @param {any} browserApi @param {string} ticket */
 export async function forgetTicket(browserApi, ticket) {
   await inTurn(async () => {
@@ -143,7 +143,7 @@ export async function forgetTicket(browserApi, ticket) {
   });
 }
 
-/** Keeps only the tickets Zajil says are open (and the newest ones).
+/** Keeps only the tickets ALHami says are open (and the newest ones).
  * @param {any} browserApi @param {string[]} open @param {number} [now] */
 export async function keepTickets(browserApi, open, now = Date.now()) {
   const listed = new Set(open);
@@ -156,10 +156,10 @@ export async function keepTickets(browserApi, open, now = Date.now()) {
 }
 
 /**
- * The answer to one of Zajil's messages on the link, or null for a message
+ * The answer to one of ALHami's messages on the link, or null for a message
  * that is not a question. The cookies are given only with the permission
  * (`cookieHeader`), and only for an open download's ticket whose site and
- * store are the ones asked about; else the answer has none, and Zajil goes
+ * store are the ones asked about; else the answer has none, and ALHami goes
  * on without them. A `keep` is applied, and answered without cookies.
  *
  * @param {any} browserApi
@@ -184,7 +184,7 @@ export async function answer(browserApi, message) {
 }
 
 /**
- * Opens the link, and opens it again whenever it closes (Zajil's host
+ * Opens the link, and opens it again whenever it closes (ALHami's host
  * missing, the browser closed it), waiting longer each time, up to
  * MAX_RETRY_MS; a question answered shows the link works, and the wait
  * starts over.
@@ -211,7 +211,7 @@ export function startLink(browserApi, how = {}) {
         try {
           port.postMessage(reply);
         } catch {
-          // closed meanwhile: Zajil gets no answer, and asks again
+          // closed meanwhile: ALHami gets no answer, and asks again
         }
       });
     });

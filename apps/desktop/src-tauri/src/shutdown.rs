@@ -1,4 +1,4 @@
-//! How Zajil stops: the downloads record their progress first, on a
+//! How ALHami stops: the downloads record their progress first, on a
 //! request to exit, a stop signal, or the end of a Windows session.
 
 #[cfg(windows)]
@@ -14,7 +14,7 @@ use crate::{App, saving};
 /// How long the program waits for the downloads to record their progress
 /// when it is closed.
 pub(crate) const STOP_WAIT: Duration = Duration::from_secs(5);
-/// At the end of a Windows session, how long Zajil waits at most for its
+/// At the end of a Windows session, how long ALHami waits at most for its
 /// downloads to stop and its writes to end before ending its process
 /// (#81). Usually far less (the downloads stopped within 0.2 s in #81's
 /// runs); past it, a write is not waited for: every file is replaced in
@@ -37,12 +37,12 @@ pub(crate) async fn wait_for_queues(
     let ended = tokio::time::timeout(limit, wait).await.is_ok();
     if ended {
         eprintln!(
-            "zajil: the downloads stopped; exiting (after {} ms)",
+            "alhami: the downloads stopped; exiting (after {} ms)",
             asked.elapsed().as_millis()
         );
     } else {
         eprintln!(
-            "zajil: the downloads did not stop within {} s; exiting, to resume from their state files (after {} ms)",
+            "alhami: the downloads did not stop within {} s; exiting, to resume from their state files (after {} ms)",
             limit.as_secs(),
             asked.elapsed().as_millis()
         );
@@ -75,7 +75,7 @@ pub(crate) fn stop_signals() -> Option<StopSignals> {
             hangup: signal(SignalKind::hangup())?,
         })
     })
-    .inspect_err(|err| eprintln!("zajil: signals will not close the program cleanly: {err}"))
+    .inspect_err(|err| eprintln!("alhami: signals will not close the program cleanly: {err}"))
     .ok()
 }
 
@@ -93,11 +93,11 @@ pub(crate) async fn exit_on_signal(handle: tauri::AppHandle, mut signals: StopSi
             _ = signals.hangup.recv() => "SIGHUP",
         };
         if asked {
-            eprintln!("zajil: asked again ({name}); exiting now");
+            eprintln!("alhami: asked again ({name}); exiting now");
             std::process::exit(1);
         }
         asked = true;
-        eprintln!("zajil: asked to stop ({name})");
+        eprintln!("alhami: asked to stop ({name})");
         handle.exit(0);
     }
 }
@@ -109,9 +109,9 @@ pub(crate) async fn exit_on_signal(handle: tauri::AppHandle, mut signals: StopSi
 /// process is ended at once: its usual exit waited seconds for WebView2
 /// (#81). Only here: the other ways of quitting exit as before.
 ///
-/// Heard on a hidden window of Zajil's own, with no page
+/// Heard on a hidden window of ALHami's own, with no page
 /// (`zajil_platform::session::watch_session_end`), so it is heard while the
-/// main window is freed in the tray (`main_window.rs`) and Zajil shows none;
+/// main window is freed in the tray (`main_window.rs`) and ALHami shows none;
 /// and on the main window too while there is one, as before (Windows may
 /// ask it first).
 #[cfg(windows)]
@@ -143,7 +143,7 @@ pub(crate) fn hook_main<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
         let _ = handle.run_on_main_thread(move || {
             if let Err(err) = hook_window(&main) {
                 eprintln!(
-                    "zajil: the main window cannot watch for the end of the Windows session: {err}"
+                    "alhami: the main window cannot watch for the end of the Windows session: {err}"
                 );
             }
         });
@@ -163,7 +163,7 @@ fn session_end<R: tauri::Runtime>(handle: tauri::AppHandle<R>) -> Box<dyn Fn() +
                 std::thread::park();
             }
         }
-        eprintln!("zajil: asked to stop (the Windows session is ending)");
+        eprintln!("alhami: asked to stop (the Windows session is ending)");
         let app = handle.state::<App>();
         if !app.exiting.swap(true, Ordering::SeqCst) {
             app.stop.request();
@@ -181,10 +181,10 @@ fn session_end<R: tauri::Runtime>(handle: tauri::AppHandle<R>) -> Box<dyn Fn() +
             .chain(late)
             .collect();
         if still.is_empty() {
-            eprintln!("zajil: saved; terminating to finish the session end");
+            eprintln!("alhami: saved; terminating to finish the session end");
         } else {
             eprintln!(
-                "zajil: not everything saved within {} s (still writing: {}); terminating to finish the session end",
+                "alhami: not everything saved within {} s (still writing: {}); terminating to finish the session end",
                 SESSION_END_WAIT.as_secs(),
                 still.join(", ")
             );

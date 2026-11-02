@@ -25,7 +25,7 @@ afterAll(async () => {
 /** A page with `body`, and the button's script with a fake `chrome` that
  * records what is sent. `open`: the test opens the button's shadow root, to
  * reach the button as no page can. `url`: where the page is. The
- * background's answers: `window.texts` to the texts asked for (Zajil's, in
+ * background's answers: `window.texts` to the texts asked for (ALHami's, in
  * Arabic, by default; a function's promise when it is one), `window.press()`
  * to a press (taken by default).
  * @param {string} body @param {{ open?: boolean, url?: string }} [how] */
@@ -41,7 +41,7 @@ async function pageWith(body, how = {}) {
   await page.addInitScript(() => {
     const w = /** @type {any} */ (window);
     w.sent = [];
-    w.texts = { lang: "ar", texts: { button: "نزّل الفيديو", working: "يُرسَل إلى زاجِل…", done: "أُرسل إلى زاجِل", failed: "✗", playlist: "نزّل قائمة التشغيل بزاجِل", thisVideo: "هذا الفيديو", wholeList: "قائمة التشغيل كلها" } };
+    w.texts = { lang: "ar", texts: { button: "نزّل الفيديو", working: "يُرسَل إلى الحامي…", done: "أُرسل إلى الحامي", failed: "✗", playlist: "نزّل قائمة التشغيل بالحامي", thisVideo: "هذا الفيديو", wholeList: "قائمة التشغيل كلها" } };
     w.press = async () => ({ taken: true });
     w.chrome = {
       runtime: {
@@ -118,7 +118,7 @@ describe("the Download video button", () => {
 
   // Owner's decision, 2026-10-28 (as IDM): read ahead, so the qualities
   // are there at the press.
-  it("showing over a video, it has Zajil read it ahead: once a page, with only its address", async () => {
+  it("showing over a video, it has ALHami read it ahead: once a page, with only its address", async () => {
     const page = await pageWith(VIDEO);
     const peeks = () => page.evaluate(() => /** @type {any} */ (window).sent.filter((/** @type {any} */ m) => m.type === "video-peek"));
     await page.mouse.move(400, 200);
@@ -263,7 +263,7 @@ describe("the Download video button", () => {
     await page.close();
   });
 
-  it("an address longer than Zajil takes is left out, not cut", async () => {
+  it("an address longer than ALHami takes is left out, not cut", async () => {
     const long = `https://media.invalid/${"a".repeat(9000)}.mp4`;
     const page = await pageWith(`<video src="${long}" style="position:absolute;left:100px;top:50px;width:640px;height:360px"></video>`);
     await page.mouse.move(400, 200);
@@ -284,7 +284,7 @@ describe("the Download video button", () => {
   it("sits at the video's top right, with a download arrow and its list's, in either language", async () => {
     for (const lang of ["ar", "en"]) {
       const page = await pageWith(VIDEO, { open: true });
-      if (lang === "en") await page.evaluate(() => void (/** @type {any} */ (window).texts = { lang: "en", texts: { button: "Download video", working: "Sending to Zajil…", done: "Sent to Zajil", failed: "The video did not reach Zajil.", playlist: "Download the playlist with Zajil", thisVideo: "This video", wholeList: "The whole playlist" } }));
+      if (lang === "en") await page.evaluate(() => void (/** @type {any} */ (window).texts = { lang: "en", texts: { button: "Download video", working: "Sending to ALHami…", done: "Sent to ALHami", failed: "The video did not reach ALHami.", playlist: "Download the playlist with ALHami", thisVideo: "This video", wholeList: "The whole playlist" } }));
       await page.mouse.move(400, 200);
       const word = lang === "en" ? "Download video" : "نزّل الفيديو";
       await page.waitForFunction((w) => [...document.documentElement.children].at(-1)?.shadowRoot?.querySelector("button")?.textContent === w, word);
@@ -331,9 +331,9 @@ describe("the Download video button", () => {
     await page.close();
   });
 
-  it("speaks Zajil's language, not the browser's", async () => {
+  it("speaks ALHami's language, not the browser's", async () => {
     const page = await pageWith(VIDEO, { open: true });
-    await page.evaluate(() => void (/** @type {any} */ (window).texts = { lang: "en", texts: { button: "Download video", working: "Sending to Zajil…", done: "Sent to Zajil", failed: "The video did not reach Zajil.", playlist: "Download the playlist with Zajil", thisVideo: "This video", wholeList: "The whole playlist" } }));
+    await page.evaluate(() => void (/** @type {any} */ (window).texts = { lang: "en", texts: { button: "Download video", working: "Sending to ALHami…", done: "Sent to ALHami", failed: "The video did not reach ALHami.", playlist: "Download the playlist with ALHami", thisVideo: "This video", wholeList: "The whole playlist" } }));
     await page.mouse.move(400, 200);
     await page.waitForFunction(() => {
       const button = [...document.documentElement.children].at(-1)?.shadowRoot?.querySelector("button");
@@ -343,7 +343,7 @@ describe("the Download video button", () => {
     await page.close();
   });
 
-  it("shows nothing until Zajil's texts come, then only in Zajil's language", async () => {
+  it("shows nothing until ALHami's texts come, then only in ALHami's language", async () => {
     const page = await pageWith(VIDEO, { open: true });
     await page.evaluate(() => {
       const w = /** @type {any} */ (window);
@@ -356,9 +356,9 @@ describe("the Download video button", () => {
     await page.mouse.click(AT.x, AT.y);
     expect(await sent(page)).toEqual([]);
     await page.evaluate(() =>
-      /** @type {any} */ (window).give({ lang: "en", texts: { button: "Download video", working: "Sending to Zajil…", done: "Sent to Zajil", failed: "The video did not reach Zajil.", playlist: "Download the playlist with Zajil", thisVideo: "This video", wholeList: "The whole playlist" } }),
+      /** @type {any} */ (window).give({ lang: "en", texts: { button: "Download video", working: "Sending to ALHami…", done: "Sent to ALHami", failed: "The video did not reach ALHami.", playlist: "Download the playlist with ALHami", thisVideo: "This video", wholeList: "The whole playlist" } }),
     );
-    // Then shown over the video the pointer is on, in Zajil's language.
+    // Then shown over the video the pointer is on, in ALHami's language.
     await page.waitForFunction(() => {
       const button = [...document.documentElement.children].at(-1)?.shadowRoot?.querySelector("button");
       return button && !button.hidden && button.textContent === "Download video";
@@ -367,7 +367,7 @@ describe("the Download video button", () => {
     await page.close();
   });
 
-  it("never shows when Zajil's texts do not come", async () => {
+  it("never shows when ALHami's texts do not come", async () => {
     for (const texts of [null, "reject"]) {
       const page = await pageWith(VIDEO, { open: true });
       await page.evaluate((how) => {
@@ -383,7 +383,7 @@ describe("the Download video button", () => {
     }
   });
 
-  it("pressed, it stays and says it is working until Zajil answers", async () => {
+  it("pressed, it stays and says it is working until ALHami answers", async () => {
     const page = await pageWith(VIDEO, { open: true });
     await page.evaluate(() => {
       const w = /** @type {any} */ (window);
@@ -403,13 +403,13 @@ describe("the Download video button", () => {
     await page.close();
   });
 
-  it("says why when Zajil does not take the video, or cannot be reached", async () => {
+  it("says why when ALHami does not take the video, or cannot be reached", async () => {
     const page = await pageWith(VIDEO, { open: true });
-    await page.evaluate(() => void (/** @type {any} */ (window).press = async () => ({ taken: false, error: "زاجِل لا يحمّل هذا الفيديو." })));
+    await page.evaluate(() => void (/** @type {any} */ (window).press = async () => ({ taken: false, error: "الحامي لا يحمّل هذا الفيديو." })));
     await page.mouse.move(400, 200);
     await page.mouse.click(AT.x, AT.y);
     await page.waitForFunction(() => [...document.documentElement.children].at(-1)?.shadowRoot?.querySelector("button")?.dataset.state === "error");
-    expect(await buttonOf(page)).toMatchObject({ hidden: false, text: "زاجِل لا يحمّل هذا الفيديو." });
+    expect(await buttonOf(page)).toMatchObject({ hidden: false, text: "الحامي لا يحمّل هذا الفيديو." });
     await page.close();
     // The background gone (the extension updated under the page): its own text.
     const gone = await pageWith(VIDEO, { open: true });
@@ -602,12 +602,12 @@ describe("YouTube's playlists", () => {
     });
   const allSent = (/** @type {import("playwright-core").Page} */ page) => page.evaluate(() => /** @type {any} */ (window).sent);
 
-  it("a playlist's page gets a button beside its title, always there, in Zajil's language; a click sends only that it was pressed", async () => {
+  it("a playlist's page gets a button beside its title, always there, in ALHami's language; a click sends only that it was pressed", async () => {
     const page = await pageWith(HEADER, { url: LIST, open: true });
     await page.mouse.move(5, 5);
     await page.waitForFunction(() => document.getElementById("box")?.nextElementSibling?.id !== "by");
     const button = await listButtonOf(page);
-    expect(button).toMatchObject({ text: "نزّل قائمة التشغيل بزاجِل", dir: "rtl", state: "idle", mark: 3 });
+    expect(button).toMatchObject({ text: "نزّل قائمة التشغيل بالحامي", dir: "rtl", state: "idle", mark: 3 });
     // Below the title, before what followed it.
     expect(await page.evaluate(() => document.getElementById("by")?.previousElementSibling?.previousElementSibling?.id)).toBe("box");
     await page.mouse.click(/** @type {any} */ (button).x, /** @type {any} */ (button).y);
@@ -616,7 +616,7 @@ describe("YouTube's playlists", () => {
     await page.close();
   });
 
-  it("pressed, it says it is working until Zajil answers, then why when it did not take it", async () => {
+  it("pressed, it says it is working until ALHami answers, then why when it did not take it", async () => {
     const page = await pageWith(HEADER, { url: LIST, open: true });
     await page.evaluate(() => {
       const w = /** @type {any} */ (window);
@@ -626,12 +626,12 @@ describe("YouTube's playlists", () => {
     await page.waitForFunction(() => document.getElementById("box")?.nextElementSibling?.id !== "by");
     const button = /** @type {any} */ (await listButtonOf(page));
     await page.mouse.click(button.x, button.y);
-    expect(await listButtonOf(page)).toMatchObject({ state: "working", text: "يُرسَل إلى زاجِل…" });
+    expect(await listButtonOf(page)).toMatchObject({ state: "working", text: "يُرسَل إلى الحامي…" });
     // A second press while it works sends nothing more.
     await page.mouse.click(button.x, button.y);
-    await page.evaluate(() => /** @type {any} */ (window).answer({ taken: false, error: "زاجِل لا يعمل الآن." }));
+    await page.evaluate(() => /** @type {any} */ (window).answer({ taken: false, error: "الحامي لا يعمل الآن." }));
     await page.waitForFunction(() => document.getElementById("box")?.nextElementSibling?.shadowRoot?.querySelector("button")?.dataset.state === "error");
-    expect(await listButtonOf(page)).toMatchObject({ text: "زاجِل لا يعمل الآن." });
+    expect(await listButtonOf(page)).toMatchObject({ text: "الحامي لا يعمل الآن." });
     expect((await allSent(page)).filter((/** @type {any} */ m) => m.type === "playlist-button")).toHaveLength(1);
     await page.close();
   });
@@ -672,7 +672,7 @@ describe("YouTube's playlists", () => {
     }
   });
 
-  it("asks Zajil nothing before a real move or key: opening the page, or a move it makes, is not enough", async () => {
+  it("asks ALHami nothing before a real move or key: opening the page, or a move it makes, is not enough", async () => {
     const page = await pageWith(HEADER, { url: LIST });
     await page.evaluate(() => {
       document.dispatchEvent(new PointerEvent("pointermove", { clientX: 5, clientY: 5, bubbles: true }));
@@ -706,7 +706,7 @@ describe("YouTube's playlists", () => {
     });
     await page.mouse.move(5, 5);
     await page.waitForFunction(() => document.getElementById("box")?.nextElementSibling?.id !== "by");
-    expect(await listButtonOf(page)).toMatchObject({ state: "idle", text: "نزّل قائمة التشغيل بزاجِل" });
+    expect(await listButtonOf(page)).toMatchObject({ state: "idle", text: "نزّل قائمة التشغيل بالحامي" });
     await page.close();
   });
 
@@ -810,9 +810,9 @@ describe("the ids of YouTube's lists", () => {
   });
 });
 
-describe("Zajil's mark in the button", () => {
-  it("is the mark of assets/icon/zajil-mark.svg, drawn by the script", () => {
-    const svg = readFileSync(new URL("../../../assets/icon/zajil-mark.svg", import.meta.url), "utf8");
+describe("ALHami's mark in the button", () => {
+  it("is the mark of assets/icon/alhami-mark.svg, drawn by the script", () => {
+    const svg = readFileSync(new URL("../../../assets/icon/alhami-mark.svg", import.meta.url), "utf8");
     const paths = [...svg.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]);
     const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1];
     expect(paths).toHaveLength(3);

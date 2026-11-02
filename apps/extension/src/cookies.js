@@ -1,12 +1,12 @@
 // @ts-check
-// The download link's cookies, for Zajil (owner's decision on #7): only with
+// The download link's cookies, for ALHami (owner's decision on #7): only with
 // the user's permission, asked for once with a button (the welcome page and
 // the settings), never at install; only the cookies of that link; sent to
-// Zajil on the same computer, which keeps them in memory only.
+// ALHami on the same computer, which keeps them in memory only.
 //
 // The same button allows the video features (M6, owner's decision): the
 // "Download video" button over a page's videos, and noting the HLS and DASH
-// playlists a tab loads. One permission for the user: "Allow Zajil on
+// playlists a tab loads. One permission for the user: "Allow ALHami on
 // sites".
 
 /** The cookie permissions: the cookies API, and every site's cookies.
@@ -18,7 +18,7 @@ export const COOKIE_PERMISSIONS = { permissions: ["cookies"], origins: ["<all_ur
  * requests for its HLS and DASH playlists. */
 export const VIDEO_PERMISSIONS = { permissions: ["scripting", "webRequest"], origins: ["<all_urls>"] };
 
-/** "Allow Zajil on sites": both, asked for and taken back together. */
+/** "Allow ALHami on sites": both, asked for and taken back together. */
 export const SITE_PERMISSIONS = {
   permissions: [...COOKIE_PERMISSIONS.permissions, ...VIDEO_PERMISSIONS.permissions],
   origins: ["<all_urls>"],
@@ -42,7 +42,7 @@ export const cookiesAllowed = (browserApi) => has(browserApi, COOKIE_PERMISSIONS
  * @param {any} browserApi */
 export const videoAllowed = (browserApi) => has(browserApi, VIDEO_PERMISSIONS);
 
-/** Whether "Allow Zajil on sites" is given, all of it.
+/** Whether "Allow ALHami on sites" is given, all of it.
  * @param {any} browserApi */
 export const sitesAllowed = (browserApi) => has(browserApi, SITE_PERMISSIONS);
 
@@ -63,7 +63,7 @@ export async function permissionView(browserApi) {
   return { text: "cookiesNotAllowed", allow: true, drop: false };
 }
 
-/** Asks for "Allow Zajil on sites". Must run from a user's click (Chrome).
+/** Asks for "Allow ALHami on sites". Must run from a user's click (Chrome).
  * @param {any} browserApi */
 export async function askForSites(browserApi) {
   try {
@@ -73,7 +73,7 @@ export async function askForSites(browserApi) {
   }
 }
 
-/** Gives "Allow Zajil on sites" back, all of it.
+/** Gives "Allow ALHami on sites" back, all of it.
  * @param {any} browserApi */
 export async function dropSites(browserApi) {
   try {
@@ -94,7 +94,7 @@ export const MAX_COOKIES = 16 * 1024;
  * ASCII and spaces: a line break would add a header). Then the download
  * goes without cookies, as without permission.
  *
- * For a link clicked with Zajil's keys, `from` is the page it was clicked
+ * For a link clicked with ALHami's keys, `from` is the page it was clicked
  * in, and its `SameSite=Strict` cookies go only if that page is of the
  * same site, as the browser does (owner's decision; `strictGoes`).
  * `noStrict`: none of them (a download asked for again whose link came

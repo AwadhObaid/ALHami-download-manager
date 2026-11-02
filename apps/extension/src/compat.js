@@ -25,7 +25,7 @@ export const DECIDE_MS = 3000;
 /**
  * Calls `handler` once for each new download, with its name when the browser
  * knows it, and `ready`, to call once it has decided (and, for a download
- * Zajil takes, hidden the browser's download UI).
+ * ALHami takes, hidden the browser's download UI).
  *
  * Chrome tells the name in `onDeterminingFilename` (Chrome only), and keeps
  * the download waiting until `suggest()`: the browser's own name is kept,
@@ -69,13 +69,13 @@ export function onNewDownload(browserApi, handler) {
   }
 }
 
-/** How many downloads are being handed to Zajil now, with the browser's own
+/** How many downloads are being handed to ALHami now, with the browser's own
  * download UI hidden (`withDownloadUiHidden`). */
 let handingOver = 0;
 
 /**
  * Runs `work` with the browser's own download UI (the bubble or bar)
- * hidden, so a download Zajil takes does not show in the browser
+ * hidden, so a download ALHami takes does not show in the browser
  * (`downloads.setUiOptions`, Chrome and Edge, with the `downloads.ui`
  * permission). It comes back once no hand-over is left, even when `work`
  * fails. Firefox has no such call: there `work` just runs.

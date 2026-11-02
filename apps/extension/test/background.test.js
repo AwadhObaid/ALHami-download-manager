@@ -4,13 +4,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 /** A fake `chrome` for the real `background.js`: its listeners are kept to
  * be fired, and what it does is recorded. `granted`: the cookie
  * permission; `buttons`: whether notifications take buttons (Firefox:
- * not); `answer`: what Zajil answers. */
+ * not); `answer`: what ALHami answers. */
 function fakeChrome({ granted, video = false, buttons = true, answer, jar = () => [{ name: "sid", value: "abc" }], windows = [], tabs = {} }) {
   const listeners = {};
   const on = (name) => ({ addListener: (fn) => (listeners[name] = fn) });
   const session = {};
   const done = { tabs: [], notifications: [], downloads: [], sent: [], cleared: [], cookieReads: [], ports: [], downloadOptions: [], menus: [], scripts: [], watched: [], tabOptions: [], order: [] };
-  // What "Allow Zajil on sites" gave: the cookies, the video features.
+  // What "Allow ALHami on sites" gave: the cookies, the video features.
   const have = new Set([...(granted ? ["cookies"] : []), ...(video ? ["scripting", "webRequest"] : [])]);
   const local = {};
   const chrome = {
@@ -21,7 +21,7 @@ function fakeChrome({ granted, video = false, buttons = true, answer, jar = () =
       getManifest: () => ({ version: "1.2.0" }),
       onInstalled: on("installed"),
       onStartup: on("startup"),
-      // The link to Zajil (M5): its port, recorded.
+      // The link to ALHami (M5): its port, recorded.
       connectNative: vi.fn(() => {
         const port = {
           sent: /** @type {any[]} */ ([]),
@@ -131,10 +131,10 @@ afterEach(() => {
   delete globalThis.chrome;
 });
 
-const forbidden = { protocol_version: 1, ok: false, error: "Zajil cannot download it: the server answered 403 Forbidden" };
+const forbidden = { protocol_version: 1, ok: false, error: "ALHami cannot download it: the server answered 403 Forbidden" };
 
 describe("the background", () => {
-  it("starts with the browser, and opens its link to Zajil at once (review of #80)", async () => {
+  it("starts with the browser, and opens its link to ALHami at once (review of #80)", async () => {
     const fake = fakeChrome({ granted: false, answer: { ok: true } });
     await load(fake);
     await flush();
@@ -143,14 +143,14 @@ describe("the background", () => {
     expect(fake.done.ports[0].sent[0]).toMatchObject({ type: "link", protocol_version: 1 });
   });
 
-  it("hides the browser's download UI before Chrome settles a download Zajil takes, and not otherwise", async () => {
+  it("hides the browser's download UI before Chrome settles a download ALHami takes, and not otherwise", async () => {
     const fake = fakeChrome({ granted: false, answer: { ok: true } });
     await load(fake);
     await flush();
     // Shown again at every start, in case a stopped background left it hidden.
     expect(fake.done.order).toEqual(["ui shown"]);
     fake.done.order.length = 0;
-    // Taken: hidden, then settled, then shown once Zajil has it.
+    // Taken: hidden, then settled, then shown once ALHami has it.
     const suggested = vi.fn(() => fake.done.order.push("suggest"));
     const back = fake.listeners.filename({ id: 8, url: "https://example.com/a.zip", finalUrl: "https://example.com/a.zip", state: "in_progress" }, suggested);
     expect(back).toBe(true);
@@ -167,7 +167,7 @@ describe("the background", () => {
     expect(page).toHaveBeenCalledTimes(1);
   });
 
-  it("keeps a ticket only for a download Zajil took with cookies, with its store", async () => {
+  it("keeps a ticket only for a download ALHami took with cookies, with its store", async () => {
     const tickets = (fake) => Object.keys(fake.local.linkTickets ?? {});
     // Taken with cookies, from a container: its ticket, as it was sent.
     let fake = fakeChrome({ granted: true, answer: { ok: true } });
@@ -186,7 +186,7 @@ describe("the background", () => {
     await flush();
     expect(tickets(fake)).toContain(fake.done.sent[1].ticket);
     expect(await openTicket(fake.chrome, fake.done.sent[1].ticket, "https://example.com/c.zip", "firefox-container-2")).toBe(true);
-    // Refused by Zajil, or sent without cookies: no ticket kept.
+    // Refused by ALHami, or sent without cookies: no ticket kept.
     fake = fakeChrome({ granted: true, answer: forbidden });
     await load(fake);
     fake.listeners.menu({ menuItemId: "zajil-download-link", linkUrl: "https://example.com/a.zip" });
@@ -200,23 +200,23 @@ describe("the background", () => {
     expect(tickets(fake)).toEqual([]);
   });
 
-  it("keeps the ticket before Zajil is asked, and while no answer came back (#158)", async () => {
-    // Zajil asks for the file's download address's cookies while it takes
+  it("keeps the ticket before ALHami is asked, and while no answer came back (#158)", async () => {
+    // ALHami asks for the file's download address's cookies while it takes
     // the download (a Google Drive link): the ticket must be there by then.
     const kept = [];
-    const fake = fakeChrome({ granted: true, answer: { ok: false, error: "Zajil did not answer in time" } });
+    const fake = fakeChrome({ granted: true, answer: { ok: false, error: "ALHami did not answer in time" } });
     await load(fake);
     fake.chrome.runtime.sendNativeMessage.mockImplementation(async (_host, message) => {
       fake.done.sent.push(message);
       kept.push(Object.keys(fake.local.linkTickets ?? {}).includes(message.ticket));
-      return { ok: false, error: "Zajil did not answer in time" };
+      return { ok: false, error: "ALHami did not answer in time" };
     });
     fake.listeners.filename({ id: 7, url: "https://example.com/e.zip", finalUrl: "https://example.com/e.zip", state: "in_progress" }, () => {});
     await flush();
     fake.listeners.menu({ menuItemId: "zajil-download-link", linkUrl: "https://example.com/d.zip" });
     await flush();
     expect(kept).toEqual([true, true]);
-    // No answer: Zajil may have taken them, so both tickets stay.
+    // No answer: ALHami may have taken them, so both tickets stay.
     expect(Object.keys(fake.local.linkTickets ?? {}).sort()).toEqual(fake.done.sent.map((m) => m.ticket).sort());
   });
 
@@ -310,7 +310,7 @@ describe("the background", () => {
     expect(fake.done.tabs).toEqual([]);
   });
 
-  it("tells Zajil when the last private window closes, once, and only after a private download (review of #91)", async () => {
+  it("tells ALHami when the last private window closes, once, and only after a private download (review of #91)", async () => {
     const windows = [{ incognito: true }, { incognito: false }];
     const fake = fakeChrome({ granted: false, answer: { ok: true }, windows });
     await load(fake);
@@ -355,7 +355,7 @@ describe("the background", () => {
     expect(fake.done.cookieReads).toEqual([]);
   });
 
-  it("offers 'Download video with Zajil' on a video or audio, and sends its page with the page's cookies (M6)", async () => {
+  it("offers 'Download video with ALHami' on a video or audio, and sends its page with the page's cookies (M6)", async () => {
     const fake = fakeChrome({ granted: true, answer: { ok: true } });
     await load(fake);
     fake.listeners.installed({ reason: "update" });
@@ -367,7 +367,7 @@ describe("the background", () => {
     await flush();
     expect(fake.done.sent).toEqual([{ type: "video", protocol_version: 1, page: "https://example.com/watch?v=1", cookies: "sid=abc" }]);
     expect(fake.done.cookieReads.at(-1)).toMatchObject({ url: "https://example.com/watch?v=1", storeId: "firefox-container-1" });
-    // Nothing kept for a video: Zajil does not ask for its cookies again.
+    // Nothing kept for a video: ALHami does not ask for its cookies again.
     expect(fake.local.linkTickets).toBeUndefined();
   });
 
@@ -381,7 +381,7 @@ describe("the background", () => {
     expect(fake.session.privateSent).toBe(true);
   });
 
-  it("a video Zajil does not take says Zajil's own reason, with no sign-in button: the browser cannot download a page's video", async () => {
+  it("a video ALHami does not take says ALHami's own reason, with no sign-in button: the browser cannot download a page's video", async () => {
     let fake = fakeChrome({ granted: false, answer: forbidden });
     await load(fake);
     fake.listeners.menu({ menuItemId: "zajil-download-video", pageUrl: "https://example.com/v" });
@@ -394,7 +394,7 @@ describe("the background", () => {
     await flush();
     expect(fake.done.notifications.at(-1)).toMatchObject({ message: "تحميل الفيديو قادم قريبًا." });
     expect(fake.done.notifications.at(-1).buttons).toBeUndefined();
-    // A page Zajil cannot read: refused before any cookie is read.
+    // A page ALHami cannot read: refused before any cookie is read.
     fake = fakeChrome({ granted: true, answer: { ok: true } });
     await load(fake);
     fake.listeners.menu({ menuItemId: "zajil-download-video", pageUrl: "file:///home/me/v.html", srcUrl: "file:///home/me/v.mp4" });
@@ -404,7 +404,7 @@ describe("the background", () => {
     expect(fake.done.notifications.at(-1).message).toBe("videoNotWeb");
   });
 
-  it("without 'Allow Zajil on sites': no button's script, no request watched; the menu only", async () => {
+  it("without 'Allow ALHami on sites': no button's script, no request watched; the menu only", async () => {
     const fake = fakeChrome({ granted: false, answer: { ok: true } });
     await load(fake);
     await flush();
@@ -628,7 +628,7 @@ describe("the background", () => {
     });
   });
 
-  describe("the button's answers, in Zajil's language", () => {
+  describe("the button's answers, in ALHami's language", () => {
     const locales = {
       ar: JSON.parse(readFileSync(new URL("../src/_locales/ar/messages.json", import.meta.url), "utf8")),
       en: JSON.parse(readFileSync(new URL("../src/_locales/en/messages.json", import.meta.url), "utf8")),
@@ -687,9 +687,9 @@ describe("the background", () => {
     });
 
     // An extension loaded unpacked never updates itself (owner's request,
-    // 2026-10-31): one older than Zajil needs tells it, once an hour, and
-    // only a Zajil that said what it needs.
-    it("an extension older than Zajil needs tells Zajil, once an hour", async () => {
+    // 2026-10-31): one older than ALHami needs tells it, once an hour, and
+    // only a ALHami that said what it needs.
+    it("an extension older than ALHami needs tells ALHami, once an hour", async () => {
       let min = "1.2.1";
       const fake = fakeChrome({ granted: false, video: true, answer: (m) => (m.type === "ping" ? { ok: true, language: "en", min_extension: min } : { ok: true }) });
       await load(fake);
@@ -705,7 +705,7 @@ describe("the background", () => {
       fake.session.zajilLanguage.at -= 61_000;
       await ask(fake, { type: "video-button-texts" });
       expect(old()).toHaveLength(2);
-      // Not older, or a Zajil that does not say: nothing.
+      // Not older, or a ALHami that does not say: nothing.
       for (const said of ["1.2.0", "1.1.9", undefined, "x"]) {
         min = /** @type {any} */ (said);
         fake.session.saidOld = 0;
@@ -719,40 +719,40 @@ describe("the background", () => {
       expect(older([2], [1, 99])).toBe(false);
     });
 
-    it("without Zajil, the browser's language", async () => {
+    it("without ALHami, the browser's language", async () => {
       const fake = fakeChrome({ granted: false, video: true, answer: { ok: true } });
       fake.chrome.runtime.sendNativeMessage = vi.fn(async () => {
         throw new Error("Specified native messaging host not found.");
       });
       await load(fake);
       await flush();
-      // The fake's browser says neither: Arabic, Zajil's default.
+      // The fake's browser says neither: Arabic, ALHami's default.
       expect(await ask(fake, { type: "video-button-texts" })).toMatchObject({ lang: "ar", texts: { button: locales.ar.videoButton.message } });
     });
 
-    it("a press: taken, refused with Zajil's own words, or unreachable in Zajil's language; no notification", async () => {
+    it("a press: taken, refused with ALHami's own words, or unreachable in ALHami's language; no notification", async () => {
       let next = { ok: true };
       const fake = fakeChrome({ granted: false, video: true, answer: (m) => (m.type === "ping" ? { ok: true, language: "ar" } : next) });
       await load(fake);
       await flush();
       expect(await ask(fake, { type: "video-button", src: "https://cdn.example/v.mp4" })).toEqual({ taken: true });
-      next = { ok: false, error: "زاجِل لا يحمّل هذا الفيديو." };
-      expect(await ask(fake, { type: "video-button", src: "https://cdn.example/v.mp4" })).toEqual({ taken: false, error: "زاجِل لا يحمّل هذا الفيديو." });
-      next = { ok: false, error: "Zajil did not answer" };
+      next = { ok: false, error: "الحامي لا يحمّل هذا الفيديو." };
+      expect(await ask(fake, { type: "video-button", src: "https://cdn.example/v.mp4" })).toEqual({ taken: false, error: "الحامي لا يحمّل هذا الفيديو." });
+      next = { ok: false, error: "ALHami did not answer" };
       expect(await ask(fake, { type: "video-button", src: "https://cdn.example/v.mp4" })).toEqual({ taken: false, error: locales.ar.videoNotAnswered.message });
       expect(fake.done.notifications).toEqual([]);
     });
 
-    it("zajil-host's own failure is said in Zajil's language, with nothing of the system (#264)", async () => {
-      let next = { ok: false, error: "Zajil's program was not found", code: "not_found" };
+    it("zajil-host's own failure is said in ALHami's language, with nothing of the system (#264)", async () => {
+      let next = { ok: false, error: "ALHami's program was not found", code: "not_found" };
       const fake = fakeChrome({ granted: false, video: true, answer: (m) => (m.type === "ping" ? { ok: true, language: "en" } : next) });
       await load(fake);
       await flush();
       expect(await ask(fake, { type: "video-button", src: "https://cdn.example/v.mp4" })).toEqual({ taken: false, error: locales.en.hostNotFound.message });
-      next = { ok: false, error: "Zajil is not running", code: "not_running" };
+      next = { ok: false, error: "ALHami is not running", code: "not_running" };
       expect(await ask(fake, { type: "video-button", src: "https://cdn.example/v.mp4" })).toEqual({ taken: false, error: locales.en.hostNotRunning.message });
-      // From the menu: the notification says the same, in Zajil's language.
-      next = { ok: false, error: "cannot reach Zajil", code: "unreachable" };
+      // From the menu: the notification says the same, in ALHami's language.
+      next = { ok: false, error: "cannot reach ALHami", code: "unreachable" };
       fake.listeners.menu({ menuItemId: "zajil-download-video", pageUrl: "https://example.com/v", srcUrl: "https://cdn.example/v.mp4" }, { id: 1, url: "https://example.com/v" });
       await flush();
       expect(fake.done.notifications.at(-1)?.message).toBe(locales.en.hostUnreachable.message);
@@ -787,7 +787,7 @@ describe("the background", () => {
     expect(fake.done.sent.at(-1)).toEqual({ type: "video", protocol_version: 1, page: "https://example.com/v" });
   });
 
-  it("a link Zajil cannot download is refused before any cookie is read", async () => {
+  it("a link ALHami cannot download is refused before any cookie is read", async () => {
     const fake = fakeChrome({ granted: true, answer: { ok: true } });
     await load(fake);
     fake.listeners.menu({ menuItemId: "zajil-download-link", linkUrl: "https://user:pw@example.com/a.zip" });
@@ -827,7 +827,7 @@ describe("the background", () => {
     await flush();
     expect(fake.done.tabs).toEqual(["chrome-extension://zajil/welcome.html"]);
   });
-  it("a link clicked with Zajil's keys goes to Zajil as from its menu, its page the browser's word (the frame's)", async () => {
+  it("a link clicked with ALHami's keys goes to ALHami as from its menu, its page the browser's word (the frame's)", async () => {
     const fake = fakeChrome({ granted: true, video: true, answer: { ok: true } });
     await load(fake);
     await flush();
@@ -851,7 +851,7 @@ describe("the background", () => {
     expect(fake.done.sent[1].cookies).toBeUndefined();
   });
 
-  it("the keys do nothing without 'Allow Zajil on sites' (a script left from before), nor from another extension or no tab", async () => {
+  it("the keys do nothing without 'Allow ALHami on sites' (a script left from before), nor from another extension or no tab", async () => {
     const fake = fakeChrome({ granted: true, video: false, answer: { ok: true } });
     await load(fake);
     await flush();
@@ -865,7 +865,7 @@ describe("the background", () => {
     expect(fake.done.sent).toEqual([]);
   });
 
-  it("a link clicked with the browser's keys stays the browser's: Zajil does not take its download, once", async () => {
+  it("a link clicked with the browser's keys stays the browser's: ALHami does not take its download, once", async () => {
     const fake = fakeChrome({ granted: false, video: true, answer: { ok: true } });
     await load(fake);
     await flush();
@@ -889,7 +889,7 @@ describe("the background", () => {
     expect(fake.session.leave).toEqual([]);
   });
 
-  it("a click left to the browser and its download arriving together: Zajil does not take it; two clicks at once are both kept (review of #169)", async () => {
+  it("a click left to the browser and its download arriving together: ALHami does not take it; two clicks at once are both kept (review of #169)", async () => {
     const fake = fakeChrome({ granted: false, video: false, answer: { ok: true } });
     await load(fake);
     await flush();
@@ -939,8 +939,8 @@ describe("the background", () => {
     expect(fake.done.sent).toEqual([]);
   });
 
-  it("A: a link sent with the keys that Zajil finds to be a web page opens in a tab behind, as Ctrl+click would; from the menu it is said, as before", async () => {
-    const page = { protocol_version: 1, ok: false, error: "Zajil cannot download it: the server sent a web page (a sign-in page?), not the file" };
+  it("A: a link sent with the keys that ALHami finds to be a web page opens in a tab behind, as Ctrl+click would; from the menu it is said, as before", async () => {
+    const page = { protocol_version: 1, ok: false, error: "ALHami cannot download it: the server sent a web page (a sign-in page?), not the file" };
     const fake = fakeChrome({ granted: true, video: true, answer: page });
     await load(fake);
     await flush();
@@ -954,7 +954,7 @@ describe("the background", () => {
     fake.listeners.message({ type: "click-link", href: "https://news.example/b" }, { id: "zajil", tab: { ...tab, cookieStoreId: "firefox-container-2" }, frameId: 0, url: tab.url });
     await flush();
     expect(fake.done.tabOptions[1].cookieStoreId).toBe("firefox-container-2");
-    // From the menu: no tab, Zajil's answer is said.
+    // From the menu: no tab, ALHami's answer is said.
     fake.listeners.menu({ menuItemId: "zajil-download-link", linkUrl: "https://news.example/c", pageUrl: tab.url }, tab);
     await flush();
     expect(fake.done.tabOptions).toHaveLength(2);
@@ -976,8 +976,8 @@ describe("the background", () => {
     const rust = readFileSync(new URL("../../desktop/src-tauri/src/extension.rs", import.meta.url), "utf8");
     const why = rust.match(/"(the server sent a web page[^"]*)"/)?.[1];
     expect(why).toBeTruthy();
-    expect(isPageRefusal({ outcome: "refused", error: `Zajil cannot download it: ${why}` })).toBe(true);
-    expect(isPageRefusal({ outcome: "refused", error: "Zajil cannot download it: the server answered 403 Forbidden" })).toBe(false);
+    expect(isPageRefusal({ outcome: "refused", error: `ALHami cannot download it: ${why}` })).toBe(true);
+    expect(isPageRefusal({ outcome: "refused", error: "ALHami cannot download it: the server answered 403 Forbidden" })).toBe(false);
   });
 
   it("a captured download: strict cookies go only from a page of the same site, and with no page, none (#92)", async () => {
@@ -996,7 +996,7 @@ describe("the background", () => {
     };
     const { answer } = await import("../src/link.js");
     const again = async (ticket) => (await answer(fake.chrome, { type: "cookies_wanted", ask: 1, url: "https://files.example/a.zip", ticket })).cookies;
-    // From another site's page: the browser sends no strict cookie, nor Zajil, now or later.
+    // From another site's page: the browser sends no strict cookie, nor ALHami, now or later.
     const other = await download(1, "https://forum.example/thread");
     expect(other.cookies).toBe("l=2");
     expect(await again(other.ticket)).toBe("l=2");
@@ -1012,7 +1012,7 @@ describe("the background", () => {
     expect(empty.cookies).toBe("l=2");
   });
 
-  it("B: from the keys, strict cookies go only from a page of the same site, as in the browser; and not when Zajil asks again later", async () => {
+  it("B: from the keys, strict cookies go only from a page of the same site, as in the browser; and not when ALHami asks again later", async () => {
     const jar = () => [
       { name: "s", value: "1", sameSite: "strict", domain: "files.example" },
       { name: "l", value: "2", sameSite: "lax", domain: ".files.example" },
@@ -1023,10 +1023,10 @@ describe("the background", () => {
     await flush();
     fake.local.settings = { useKeys: true };
     const click = (page) => fake.listeners.message({ type: "click-link", href: "https://files.example/a.zip" }, { id: "zajil", tab: { id: 4, url: page }, frameId: 0, url: page });
-    // Two clicks at once reach Zajil in either order (each ticket's hash is
+    // Two clicks at once reach ALHami in either order (each ticket's hash is
     // made on Node's thread pool first, #206): each is found by its page.
     const from = (page) => fake.done.sent.find((m) => m.referrer === page);
-    // Waits for Zajil to have `n` links, not a fixed time (a loaded runner
+    // Waits for ALHami to have `n` links, not a fixed time (a loaded runner
     // takes longer than `flush`).
     const reached = (n) => vi.waitFor(() => expect(fake.done.sent).toHaveLength(n));
     // Another site's page: no strict cookie.

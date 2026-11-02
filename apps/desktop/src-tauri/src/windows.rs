@@ -3,7 +3,7 @@
 //! dialogs inside the main window. The page draws them too
 //! (`index.html?win=…`); what each one starts with waits here, so no link
 //! goes into a window's address. They have their own capability (`add`):
-//! listening to Zajil's events and the system's folder picker, nothing
+//! listening to ALHami's events and the system's folder picker, nothing
 //! else.
 
 use std::sync::Mutex;
@@ -172,10 +172,10 @@ pub(crate) fn open_page<R: tauri::Runtime>(
         label,
         WebviewUrl::App(format!("index.html?win={page}").into()),
     );
-    // On Windows a window Zajil opens by itself is owned by the main one:
+    // On Windows a window ALHami opens by itself is owned by the main one:
     // a close sent to the program (`taskkill`, an installer) goes to its
     // main window, the first unowned one, which would otherwise be this
-    // newer window, and Zajil would go on (review of #137: the close tests).
+    // newer window, and ALHami would go on (review of #137: the close tests).
     // Owned windows also go with their owner. Windows only: elsewhere a
     // parent ties the window to the main one, hidden in the tray with it.
     #[cfg(windows)]
@@ -407,7 +407,7 @@ pub fn warm<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
 }
 
 /// A new spare of `kind` after `delay`, if it has none, while the main
-/// window is there and Zajil is not quitting. From another thread: never
+/// window is there and ALHami is not quitting. From another thread: never
 /// on the main one ([`open`]).
 fn refill<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, kind: Kind, delay: std::time::Duration) {
     let handle = handle.clone();
@@ -451,7 +451,7 @@ fn refill<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, kind: Kind, delay: st
                 });
                 pool.spares.lock().unwrap().insert(kind, label);
             }
-            Err(err) => eprintln!("zajil: a window made beforehand: {err}"),
+            Err(err) => eprintln!("alhami: a window made beforehand: {err}"),
         }
     });
 }
@@ -599,9 +599,9 @@ static MISSING: std::sync::LazyLock<Mutex<std::collections::HashMap<&'static str
 pub const INFO_OPEN: &str = "info-open";
 
 /// Opens window `label` on `page` only while the main window is there and
-/// Zajil is not quitting: a window that Zajil opens by itself (a download
-/// finished) must not keep a quitting Zajil alive. Closing the main window
-/// ends Zajil once no window is left (the close tests on Windows, review
+/// ALHami is not quitting: a window that ALHami opens by itself (a download
+/// finished) must not keep a quitting ALHami alive. Closing the main window
+/// ends ALHami once no window is left (the close tests on Windows, review
 /// of #137): a window that opened just after it would stop that. If the
 /// main window goes while this one opens, this one goes too.
 pub(crate) fn open_beside_main<R: tauri::Runtime>(

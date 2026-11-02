@@ -14,7 +14,7 @@ use tauri::{AppHandle, Manager, Runtime, State};
 
 use crate::closing;
 
-pub const ID: &str = "zajil";
+pub const ID: &str = "alhami";
 
 fn menu<R: Runtime, M: Manager<R>>(
     app: &M,
@@ -152,7 +152,7 @@ mod tests {
 
     #[test]
     fn a_long_tooltip_is_cut_at_a_character_within_windows_limit() {
-        assert_eq!(fit("زاجِل"), "زاجِل");
+        assert_eq!(fit("الحامي"), "الحامي");
         let long = "ب".repeat(200);
         let cut = fit(&long);
         assert_eq!(cut.encode_utf16().count(), TIP_UNITS);

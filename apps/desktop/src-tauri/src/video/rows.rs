@@ -18,7 +18,7 @@ fn rows_file(app: &crate::App) -> PathBuf {
     app.data_dir.join(ROWS_FILE)
 }
 
-/// At start: the list's video downloads. One that was running when Zajil
+/// At start: the list's video downloads. One that was running when ALHami
 /// stopped is paused (its run was swept).
 pub fn load_rows(app: &crate::App, state: &VideoState) {
     let rows = read_rows(&rows_file(app));
@@ -32,13 +32,13 @@ fn read_rows(path: &std::path::Path) -> Vec<Row> {
         return Vec::new();
     };
     let Ok(mut rows) = serde_json::from_str::<Vec<Row>>(&text) else {
-        eprintln!("zajil: {ROWS_FILE} could not be read; the video downloads start empty");
+        eprintln!("alhami: {ROWS_FILE} could not be read; the video downloads start empty");
         return Vec::new();
     };
     // Never an id of the queues' (a file changed by hand).
     rows.retain(|r| is_video(r.id));
     for row in &mut rows {
-        // What came stays shown: Zajil's own way continues from it.
+        // What came stays shown: ALHami's own way continues from it.
         if matches!(row.status, StatusView::Active | StatusView::Waiting) {
             row.status = StatusView::Paused;
         }
@@ -57,7 +57,7 @@ pub(super) fn save_rows(app: &crate::App, state: &VideoState) {
             crate::saving::write_whole(&path, &path.with_extension("json.new"), &bytes)
         });
     if let Err(e) = saved {
-        eprintln!("zajil: {ROWS_FILE} could not be saved: {e}");
+        eprintln!("alhami: {ROWS_FILE} could not be saved: {e}");
     }
 }
 
@@ -159,7 +159,7 @@ pub fn details(
     id: u64,
 ) -> Option<DetailsView> {
     let row = with_row(state, id, |row| row.clone())?;
-    // Zajil's own way (YouTube) continues from its parts, yt-dlp from the
+    // ALHami's own way (YouTube) continues from its parts, yt-dlp from the
     // folder kept for the video: there once it began, its file once it
     // finished.
     let folder = std::path::Path::new(&row.folder);
@@ -204,7 +204,7 @@ pub fn remove<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, ids: &[u64]) {
 }
 
 /// «Delete» with the unfinished files: an unfinished video goes as a
-/// cancelled one does, with its parts (Zajil's own way leaves them in its
+/// cancelled one does, with its parts (ALHami's own way leaves them in its
 /// folder; yt-dlp's run is swept); a finished one leaves the list and
 /// keeps its file.
 pub fn remove_with_files<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, ids: &[u64]) {
@@ -230,10 +230,10 @@ fn by_finished(rows: &[Row], ids: &[u64]) -> (Vec<u64>, Vec<u64>) {
 pub fn clean_leftovers(app: &crate::App) {
     let (tools, runs) = folders(app);
     if let Err(e) = Toolbox::new(tools).remove_leftovers() {
-        eprintln!("zajil: the video tools' leftovers: {e}");
+        eprintln!("alhami: the video tools' leftovers: {e}");
     }
     if let Err(e) = Runs::new(runs).clean_leftovers() {
-        eprintln!("zajil: the video runs' leftovers: {e}");
+        eprintln!("alhami: the video runs' leftovers: {e}");
     }
 }
 
@@ -260,7 +260,7 @@ mod tests {
     use crate::video::download::{NewVideo, new_row};
     use crate::video::tests::row;
 
-    /// After a restart, a video that ran is paused with what came (Zajil's
+    /// After a restart, a video that ran is paused with what came (ALHami's
     /// own way continues from it); a file changed by hand never takes a
     /// queue's id.
     #[test]
@@ -306,7 +306,7 @@ mod tests {
     }
 
     /// A private window's video is in the list, but never in
-    /// `videos.json` (zajil-host: Zajil keeps nothing of it).
+    /// `videos.json` (zajil-host: ALHami keeps nothing of it).
     #[test]
     fn a_private_window_s_video_is_never_written_down() {
         let mut secret = row(FIRST_ID + 2, StatusView::Active);

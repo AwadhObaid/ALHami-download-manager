@@ -1,10 +1,10 @@
 // @ts-check
 // The keys of a click on a link (owner's decision, 2026-10-26): held while
-// clicking, one set sends the link to Zajil, the other leaves it to the
-// browser, which then downloads it without Zajil taking it. Off until the
+// clicking, one set sends the link to ALHami, the other leaves it to the
+// browser, which then downloads it without ALHami taking it. Off until the
 // user turns them on in the extension's settings; then by default Ctrl and
 // Alt on Windows and Linux, Option and Option+Shift on a Mac, which the
-// settings change. Only with "Allow Zajil on sites": the
+// settings change. Only with "Allow ALHami on sites": the
 // background registers this script on every site then, and removes it when
 // the permission goes.
 //

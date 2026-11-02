@@ -11,7 +11,7 @@ const strip = (s: string) => s.replace(/[⁦-⁩]/g, "");
 describe("the tray icon's tooltip", () => {
   it("says how many run, how far they are together and their speed", () => {
     const downloads = [d("active", 1000, 500, 1048576), d("active", 1000, 400, 1048576), d("active", 2000, 900, 0), d("waiting", 5000, 0, 0), d("done", 10, 10, 0)];
-    expect(strip(trayTip(downloads, "en", "latn", t("en")))).toBe("Zajil\nDownloading: 3 downloads · 45% · 2 MiB/s");
+    expect(strip(trayTip(downloads, "en", "latn", t("en")))).toBe("ALHami\nDownloading: 3 downloads · 45% · 2 MiB/s");
     expect(strip(trayTip(downloads, "ar", "latn", t("ar")))).toContain("يعمل الآن: 3 تحميلات · 45");
   });
 

@@ -72,7 +72,7 @@ pub fn receive<R: tauri::Runtime>(
                 .add
                 .progress_window;
             if let Err(err) = crate::addprefs::show_started(handle, show, id, &name) {
-                eprintln!("zajil: the progress window of video {id}: {err}");
+                eprintln!("alhami: the progress window of video {id}: {err}");
             }
             return;
         }
@@ -271,7 +271,7 @@ pub(super) fn discard<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, id: u64) 
 /// the tools' download still running, as «Download file info» does.
 pub fn open_window<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) -> tauri::Result<()> {
     let new = handle.get_webview_window(LABEL).is_none();
-    crate::windows::open(handle, LABEL, "Zajil", SIZE)?;
+    crate::windows::open(handle, LABEL, "ALHami", SIZE)?;
     let Some(window) = handle.get_webview_window(LABEL) else {
         return Ok(());
     };

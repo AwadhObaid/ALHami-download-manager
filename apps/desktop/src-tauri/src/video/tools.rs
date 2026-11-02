@@ -20,7 +20,7 @@ pub struct ToolView {
     /// `yt-dlp`, `ffmpeg` or `ffprobe`.
     pub tool: String,
     pub installed: bool,
-    /// The version Zajil installs.
+    /// The version ALHami installs.
     pub version: Option<String>,
     /// Where it comes from: the host only.
     pub host: Option<String>,
@@ -82,7 +82,7 @@ fn checked_twice(toolbox: &Toolbox, tool: Tool) -> Option<zajil_core::tools::Too
     {
         return Some(first);
     }
-    eprintln!("zajil: {} failed its check once: {first}", name(tool));
+    eprintln!("alhami: {} failed its check once: {first}", name(tool));
     std::thread::sleep(std::time::Duration::from_millis(300));
     toolbox.why_not_installed(tool)
 }
@@ -95,7 +95,7 @@ fn tools_status(toolbox: &Toolbox) -> Vec<ToolView> {
             let pin = target.and_then(|_| toolbox.pinned(tool));
             let why = checked_twice(toolbox, tool);
             if let Some(why) = &why {
-                eprintln!("zajil: {} is not ready: {why}", name(tool));
+                eprintln!("alhami: {} is not ready: {why}", name(tool));
             }
             ToolView {
                 tool: name(tool).into(),
@@ -208,9 +208,9 @@ pub fn update_tools<R: tauri::Runtime>(handle: tauri::AppHandle<R>) {
         let toolbox = Toolbox::new(folders(&app).0);
         for tool in earlier {
             match toolbox.install(&app.engine, tool, &stop, &mut |_| {}).await {
-                Ok(path) => eprintln!("zajil: {tool} brought up to date: {}", path.display()),
+                Ok(path) => eprintln!("alhami: {tool} brought up to date: {}", path.display()),
                 Err(e) => {
-                    eprintln!("zajil: {tool} could not be brought up to date: {e}");
+                    eprintln!("alhami: {tool} could not be brought up to date: {e}");
                     return;
                 }
             }

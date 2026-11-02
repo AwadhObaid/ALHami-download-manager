@@ -1,5 +1,5 @@
 //! The drop box (M5.5, an IDM touch): a small window, always on top of the
-//! others, with Zajil's mark; a link (or text with a link) dropped on it
+//! others, with ALHami's mark; a link (or text with a link) dropped on it
 //! opens «Download file info». Off at first; shown or hidden from the
 //! settings and the tray, hidden by a right-click on it; where the user
 //! leaves it is kept (`window.json`, with the window preferences).
@@ -16,7 +16,7 @@ use crate::closing::Closing;
 pub const LABEL: &str = "drop";
 /// Its size, in logical pixels.
 pub const SIZE: f64 = 72.0;
-/// Its capability: listening to Zajil's events and dragging itself.
+/// Its capability: listening to ALHami's events and dragging itself.
 pub const CAPABILITY: &str = include_str!("../runtime-capabilities/drop.json");
 
 /// Where the drop box was left, in physical pixels on the screen.
@@ -40,7 +40,7 @@ pub fn show<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, shown: bool) -> tau
     }
     let mut builder =
         WebviewWindowBuilder::new(handle, LABEL, WebviewUrl::App("index.html?win=drop".into()))
-            .title("Zajil")
+            .title("ALHami")
             .inner_size(SIZE, SIZE)
             .resizable(false)
             .decorations(false)

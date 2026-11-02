@@ -22,7 +22,7 @@ pub(crate) fn serve_extension<R: tauri::Runtime>(handle: tauri::AppHandle<R>, da
     let listener = match zajil_platform::ipc::Listener::bind(&data) {
         Ok(listener) => listener,
         Err(err) => {
-            eprintln!("zajil: the browser extension cannot reach this window: {err}");
+            eprintln!("alhami: the browser extension cannot reach this window: {err}");
             return;
         }
     };
@@ -102,7 +102,7 @@ pub(crate) fn serve_extension<R: tauri::Runtime>(handle: tauri::AppHandle<R>, da
                     video::read_ahead(&handle, page.clone(), media.clone(), cookies.clone());
                     return zajil_host::Response::ok();
                 }
-                // The extension is older than this Zajil needs: the main
+                // The extension is older than this ALHami needs: the main
                 // window asks the user to update it.
                 if let zajil_host::Request::ExtensionOld { version, .. } = &request {
                     update::extension_old(&handle, version);
@@ -113,7 +113,7 @@ pub(crate) fn serve_extension<R: tauri::Runtime>(handle: tauri::AppHandle<R>, da
                 if let zajil_host::Request::PrivateClosed { .. } = &request {
                     video::discard_private(&handle);
                 }
-                // Zajil started again on this data folder (macOS, #60).
+                // ALHami started again on this data folder (macOS, #60).
                 if let zajil_host::Request::ShowWindow { .. } = &request {
                     tray::show_window(&handle);
                     return zajil_host::Response::ok();
@@ -154,7 +154,7 @@ pub(crate) fn serve_extension<R: tauri::Runtime>(handle: tauri::AppHandle<R>, da
 
 /// How long a download from the browser waits for that browser's cookies
 /// of a Google Drive file's download address: the extension is waiting
-/// for Zajil's answer meanwhile, and the host gives up on it after 10 s,
+/// for ALHami's answer meanwhile, and the host gives up on it after 10 s,
 /// the check of the file included (review of the Drive links).
 const DRIVE_ASK_PATIENCE: Duration = Duration::from_secs(2);
 
@@ -187,7 +187,7 @@ fn reach_file(engine: &Engine, url: &str) -> Result<zajil_core::Probe, String> {
     })
 }
 
-/// Why what Zajil reached is not the file the browser was downloading: a
+/// Why what ALHami reached is not the file the browser was downloading: a
 /// web page (a sign-in page a link redirected to, review of #70), or a file
 /// of another type than the name the browser had.
 fn not_the_file(probe: &zajil_core::Probe, browser_name: Option<&str>) -> Option<String> {
@@ -209,12 +209,12 @@ fn not_the_file(probe: &zajil_core::Probe, browser_name: Option<&str>) -> Option
 }
 
 /// What a request from the extension does: a download goes into the
-/// default queue, by category, as the add dialog adds one, **once Zajil
+/// default queue, by category, as the add dialog adds one, **once ALHami
 /// has reached the file itself** (`reach`), and it is that file (not a web
 /// page, the same extension as the browser's name): otherwise it is
 /// refused, and the extension leaves it to the browser (review of #70: a
 /// file behind a login, a referrer check or a one-time link would vanish
-/// from the browser and then fail in Zajil). The cookies (sent only when
+/// from the browser and then fail in ALHami). The cookies (sent only when
 /// the user allowed them in the extension) and the page go with the check
 /// and the download, from memory (`App::from_browser`).
 #[cfg(test)]
@@ -325,7 +325,7 @@ fn from_extension_with(
     }
 }
 
-/// A download the browser sent, before Zajil has reached the file: its
+/// A download the browser sent, before ALHami has reached the file: its
 /// link, the browser's name for it, its cookies and page (in memory only),
 /// and where it came from.
 #[derive(Clone)]
@@ -403,7 +403,7 @@ pub(crate) fn from_page(
     }))
 }
 
-/// The file `page` names, as Zajil reaches it (`reach`), and whether it can
+/// The file `page` names, as ALHami reaches it (`reach`), and whether it can
 /// run code; refused when it is not that file (review of #70), with what
 /// the extension tells the user.
 pub(crate) fn reached(
@@ -411,9 +411,9 @@ pub(crate) fn reached(
     reach: impl FnOnce(&str, &zajil_core::FromBrowser) -> Result<zajil_core::Probe, String>,
 ) -> Result<(zajil_core::Probe, bool), String> {
     let probe =
-        reach(&page.url, &page.from).map_err(|why| format!("Zajil cannot download it: {why}"))?;
+        reach(&page.url, &page.from).map_err(|why| format!("ALHami cannot download it: {why}"))?;
     if let Some(why) = not_the_file(&probe, page.filename.as_deref()) {
-        return Err(format!("Zajil cannot download it: {why}"));
+        return Err(format!("ALHami cannot download it: {why}"));
     }
     // A file that can run code, from a page: never started by itself, the
     // user starts it (security review #84). By the server's name, the
@@ -648,7 +648,7 @@ mod tests {
         assert!(answer.ok, "{answer:?}");
     }
 
-    /// M5: the cookies and the page the extension sends go with Zajil's
+    /// M5: the cookies and the page the extension sends go with ALHami's
     /// check, and are kept in memory for the download, under its item; a
     /// download sent without them keeps none.
     #[test]
@@ -1060,7 +1060,7 @@ mod tests {
         }
     }
 
-    /// A file Zajil cannot reach itself (behind a login, a referrer check,
+    /// A file ALHami cannot reach itself (behind a login, a referrer check,
     /// or gone) is refused and nothing is added, so the extension leaves it
     /// to the browser (review of #70).
     #[test]
@@ -1086,7 +1086,7 @@ mod tests {
         assert!(!answer.ok);
         assert_eq!(
             answer.error.as_deref(),
-            Some("Zajil cannot download it: the server answered 403 Forbidden")
+            Some("ALHami cannot download it: the server answered 403 Forbidden")
         );
         assert_eq!(asked, ["https://example.com/private.zip"]);
         assert!(store.load().unwrap().queues[0].items.is_empty());

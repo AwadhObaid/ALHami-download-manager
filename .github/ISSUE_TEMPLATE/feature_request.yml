@@ -1,5 +1,5 @@
 name: "💡 اقتراح ميزة (Feature request)"
-description: "فكرة لتحسين زاجِل — An idea to improve Zajil"
+description: "فكرة لتحسين ALHami — An idea to improve ALHami"
 labels: ["enhancement"]
 body:
   - type: textarea

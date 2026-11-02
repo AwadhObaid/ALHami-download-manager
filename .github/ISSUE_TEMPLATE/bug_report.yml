@@ -53,8 +53,8 @@ body:
   - type: textarea
     id: info
     attributes:
-      label: "معلومات المشكلة من زاجِل (Problem info)"
-      description: "في زاجِل: «مساعدة» ← «عن زاجِل» ← «انسخ معلومات المشكلة»، ثم الصق هنا. فيها النسخة والنظام وأدوات الفيديو وآخر أسطر السجل، بلا روابط. In Zajil: Help → About Zajil → Copy problem info, then paste here."
+      label: "معلومات المشكلة من ALHami (Problem info)"
+      description: "في ALHami: «مساعدة» ← «عن الحامي» ← «انسخ معلومات المشكلة»، ثم الصق هنا. فيها النسخة والنظام وأدوات الفيديو وآخر أسطر السجل، بلا روابط. In ALHami: Help → About ALHami → Copy problem info, then paste here."
       render: text
   - type: textarea
     id: logs

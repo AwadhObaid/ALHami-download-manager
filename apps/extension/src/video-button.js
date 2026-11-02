@@ -1,12 +1,12 @@
 // @ts-check
 // The "Download video" button over a page's videos (M6, owner's decision).
-// Only with "Allow Zajil on sites": the background registers this script on
+// Only with "Allow ALHami on sites": the background registers this script on
 // every site then, and removes it when the permission goes.
 //
 // It reads nothing of the page but where its videos are and their address.
 // A press sends the background only that address: the page, its frame and
 // its tab come from the browser (`runtime.MessageSender`), not from here.
-// So does the button's first showing on a page (`video-peek`), for Zajil
+// So does the button's first showing on a page (`video-peek`), for ALHami
 // to read the video ahead.
 //
 // What the page can and cannot do (review): it cannot reach the button (a
@@ -24,15 +24,15 @@
 // from here: that would need a script in the page's own world.
 //
 // As in other download managers (owner's decision, 2026-10-27): at the video's top right, with
-// Zajil's mark, in Zajil's own language (the background asks zajil-host,
-// which reads Zajil's settings). Pressed, it stays and says it is working
-// until Zajil answers, then says if it failed. On YouTube only on a video's
+// ALHami's mark, in ALHami's own language (the background asks zajil-host,
+// which reads ALHami's settings). Pressed, it stays and says it is working
+// until ALHami answers, then says if it failed. On YouTube only on a video's
 // own page, a Short or an embedded player: not on the home page, search or
 // a channel, whose previews play as the pointer passes.
 //
 // YouTube's playlists (owner's decision, 2026-10-28): a playlist's page has
 // no video, so it gets a button of its own, always there, beside the
-// playlist's title: "Download the playlist with Zajil". And on a video
+// playlist's title: "Download the playlist with ALHami". And on a video
 // played from a playlist (`/watch?v=…&list=…`), the button offers two
 // choices: "This video" and "The whole playlist". Both send the background
 // only what was chosen: the playlist's page comes from the tab's own
@@ -44,9 +44,9 @@
 // button says how many formats the video has, «Download video (N) ▾», and
 // a press opens their list at once, each with its size and rate: read from
 // the player's own answer in the page (`yt-page.js`, in the page's world,
-// asked by an event on the document), never waiting for Zajil. A choice
-// sends the background only that format's itag (and its sound's); Zajil
-// finds it in what it read itself. «?» opens Zajil's page in the browser,
+// asked by an event on the document), never waiting for ALHami. A choice
+// sends the background only that format's itag (and its sound's); ALHami
+// finds it in what it read itself. «?» opens ALHami's page in the browser,
 // «✕» hides the button for this video. Elsewhere, or before the page says
 // anything, a press sends the video as before.
 //
@@ -126,11 +126,11 @@
   /** How long "sent" and an error stay. */
   const DONE_MS = 1500;
   const ERROR_MS = 6000;
-  /** The longest the button waits for Zajil's answer (zajil-host gives up
-   * sooner: 20 s to start Zajil, then 10 s on its channel). */
+  /** The longest the button waits for ALHami's answer (zajil-host gives up
+   * sooner: 20 s to start ALHami, then 10 s on its channel). */
   const ANSWER_MS = 45_000;
 
-  /** Zajil's mark (`assets/icon/zajil-mark.svg`), drawn here: no file of the
+  /** ALHami's mark (`assets/icon/alhami-mark.svg`), drawn here: no file of the
    * extension is open to pages (no `web_accessible_resources`). A test checks
    * it is the same as the file. */
   const MARK_VIEWBOX = "44.85 44.40 478.12 478.12";
@@ -246,7 +246,7 @@
   };
   /** A download arrow over a tray. */
   const DOWNLOAD = ["M12 4v11", "M7 10.5l5 5 5-5", "M5 19.5h14"];
-  /** A button with its icon (Zajil's mark, or a download arrow), its
+  /** A button with its icon (ALHami's mark, or a download arrow), its
    * spinner and its text; the video's has an arrow for its list.
    * @param {string} name its class @param {"mark" | "download"} [kind] */
   const makeButton = (name, kind = "mark") => {
@@ -357,7 +357,7 @@
     if (listing.duration) title.append(line("length", listing.duration));
     menu.append(title);
     // The sound's language, when the video has several (owner's request,
-    // 2026-10-31): «Original» first (Zajil takes the video's own), then
+    // 2026-10-31): «Original» first (ALHami takes the video's own), then
     // each language by its name.
     if (listing.tracks?.length) {
       menu.append(line("head", texts.listSound ?? "Sound"));
@@ -412,7 +412,7 @@
   const page = { ...makeButton("page"), rest: (/** @type {Texts} */ t) => t.playlist };
   listRoot.append(listStyle, page.button);
 
-  /** The buttons' texts, in Zajil's language, from the background (asked
+  /** The buttons' texts, in ALHami's language, from the background (asked
    * once: at the first video, or on a playlist's page at the first real
    * move of the pointer or key press, never by the page alone). Until they come the button is not shown at
    * all, so it never shows in another language first (owner's decision on
@@ -436,11 +436,11 @@
       }
       const dir = answer.lang === "en" ? "ltr" : "rtl";
       texts = /** @type {Texts} */ ({ dir, ...Object.fromEntries(keys.map((key) => [key, given[key]])) });
-      // The list's words, when this Zajil has them.
+      // The list's words, when this ALHami has them.
       for (const key of /** @type {const} */ (["listVideo", "listAudio", "listSound", "listOriginal", "more", "help", "hide"])) {
         if (typeof given[key] === "string" && given[key]) texts[key] = given[key];
       }
-      help.title = texts.help ?? "Zajil";
+      help.title = texts.help ?? "ALHami";
       close.title = texts.hide ?? "✕";
       close.setAttribute("aria-label", close.title);
       setState("idle");
@@ -542,7 +542,7 @@
   let dismissed = "";
   /** The page whose video was last sent to be read ahead. */
   let peeked = "";
-  /** Zajil reads the video ahead as soon as its button shows, once a page
+  /** ALHami reads the video ahead as soon as its button shows, once a page
    * (owner's decision, 2026-10-28, as in other download managers): its qualities are there when
    * the button is pressed. Only the video's address goes, as for a press.
    * @param {HTMLVideoElement} found */

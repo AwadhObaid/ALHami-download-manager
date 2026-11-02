@@ -5,7 +5,7 @@
 // optional script). This file wraps it in the one layout (header, menu,
 // icons, footer) for its language: pages under `en/` are English, the rest
 // Arabic. The screenshots and the icon are copied from where the
-// repository keeps them (docs/screenshots, assets/icon), never kept twice.
+// repository keeps them (docs/screenshots, site/legacy-assets), never kept twice.
 //
 // Run from anywhere: node site/build.mjs
 
@@ -329,7 +329,7 @@ export function build() {
   cpSync(join(SRC, "assets"), join(OUT, "assets"), { recursive: true });
   cpSync(join(ROOT, "docs", "screenshots"), join(OUT, "screenshots"), { recursive: true });
   for (const name of ["zajil-icon.svg", "zajil-mark.svg"]) {
-    cpSync(join(ROOT, "assets", "icon", name), join(OUT, "assets", name));
+    cpSync(join(ROOT, "site", "legacy-assets", name), join(OUT, "assets", name));
   }
   const appIcons = join(ROOT, "apps", "desktop", "src-tauri", "icons");
   cpSync(join(appIcons, "32x32.png"), join(OUT, "assets", "icon-32.png"));

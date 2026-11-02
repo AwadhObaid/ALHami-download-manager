@@ -1,5 +1,5 @@
 // The keys of a click (`click-keys.js`) in a real browser: a link clicked
-// with Zajil's keys goes to the background and nowhere else; with the
+// with ALHami's keys goes to the background and nowhere else; with the
 // browser's keys the browser keeps it; anything else is the page's own. On
 // CI, the runner's Chrome; here, Playwright's Chromium. No site is reached.
 import { readFileSync } from "node:fs";
@@ -26,7 +26,7 @@ const LINK = `<a id="a" href="https://files.invalid/a.zip" style="position:absol
 /** A page with a link the page also listens to, and the script with a fake
  * `chrome` that records what is sent. `stored`: the extension's settings;
  * `mac`: the page says it is a Mac; `on`: the background's word that
- * "Allow Zajil on sites" is given (`clickKeysOn`).
+ * "Allow ALHami on sites" is given (`clickKeysOn`).
  * @param {{ stored?: object, mac?: boolean, body?: string, on?: boolean }} [how] */
 async function pageWith(how = {}) {
   const context = await browser.newContext({ viewport: { width: 800, height: 400 } });
@@ -74,7 +74,7 @@ async function click(page, modifiers) {
 const ctrlClicks = process.platform !== "darwin";
 
 describe("the keys of a click", () => {
-  it.runIf(ctrlClicks)("Ctrl+click sends the link to Zajil, and the browser and the page do nothing with it (Windows and Linux)", async () => {
+  it.runIf(ctrlClicks)("Ctrl+click sends the link to ALHami, and the browser and the page do nothing with it (Windows and Linux)", async () => {
     const { page, context } = await pageWith();
     await click(page, ["Control"]);
     expect(await sent(page)).toEqual([{ type: "click-link", href: "https://files.invalid/a.zip" }]);

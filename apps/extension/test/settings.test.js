@@ -17,7 +17,7 @@ function fakeStorage(initial) {
 }
 
 describe("settings", () => {
-  it("default to capturing Zajil's built-in categories, with no excluded site", async () => {
+  it("default to capturing ALHami's built-in categories, with no excluded site", async () => {
     expect(await load(fakeStorage())).toEqual(defaults());
     expect(defaults().capture).toBe(true);
   });
@@ -64,7 +64,7 @@ describe("settings", () => {
     expect(isMac({ platform: "Linux x86_64" })).toBe(false);
     expect(clickKeys(defaults(), false)).toEqual({ send: "ctrl", browser: "alt" });
     expect(clickKeys(defaults(), true)).toEqual({ send: "alt", browser: "alt+shift" });
-    // The same keys for both: Zajil's win.
+    // The same keys for both: ALHami's win.
     expect(clickKeys({ sendKeys: "alt", browserKeys: null }, false)).toEqual({ send: "alt", browser: "off" });
     const api = fakeStorage();
     await save(api, { ...defaults(), sendKeys: "ctrl+shift", browserKeys: "meta" });

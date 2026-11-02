@@ -32,7 +32,7 @@
     failed = false;
     progress = null;
     try {
-      // Zajil opens again once it is installed.
+      // ALHami opens again once it is installed.
       await updateApi.install();
     } catch {
       progress = undefined;

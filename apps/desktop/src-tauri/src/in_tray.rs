@@ -1,4 +1,4 @@
-//! What the main page does for Zajil, done here while its window is freed
+//! What the main page does for ALHami, done here while its window is freed
 //! in the tray (`main_window.rs`): with no page, nothing would say that a
 //! download finished. As the page does (`App.svelte`'s `announce`,
 //! `trayTip.ts`, `sounds.ts`), once a second: the system's notification
@@ -39,7 +39,7 @@ struct Seen {
     tip: String,
 }
 
-/// The main window was freed: Zajil says what happens, from what the list
+/// The main window was freed: ALHami says what happens, from what the list
 /// shows now (nothing that happened before).
 pub fn start<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
     let state = handle.state::<InTray>();
@@ -100,7 +100,7 @@ async fn look<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, first: bool) {
         // How many, never their names (the log is the user's own, but
         // names stay out of it, as links do).
         eprintln!(
-            "zajil: in the tray: {} finished or failed (notifications {}, sound {:?})",
+            "alhami: in the tray: {} finished or failed (notifications {}, sound {:?})",
             said.finished.len(),
             if settings.notifications { "on" } else { "off" },
             said.sound(&handle.state::<crate::closing::Closing>().prefs().sounds)
@@ -383,7 +383,7 @@ mod tests {
     #[test]
     fn the_tooltip_says_what_runs() {
         let plain = |s: String| zajil_i18n::without_isolation(&s);
-        assert_eq!(plain(tray_tip(&[], Lang::En, Digits::Latn)), "Zajil");
+        assert_eq!(plain(tray_tip(&[], Lang::En, Digits::Latn)), "ALHami");
         let mut a = d(1, "main", StatusView::Active);
         a.size = Some(100 * 1024 * 1024);
         a.done = 45 * 1024 * 1024;
@@ -391,12 +391,12 @@ mod tests {
         let paused = d(2, "main", StatusView::Paused);
         assert_eq!(
             plain(tray_tip(&[a.clone(), paused], Lang::En, Digits::Latn)),
-            "Zajil\nDownloading: 1 download · 45% · 2 MiB/s"
+            "ALHami\nDownloading: 1 download · 45% · 2 MiB/s"
         );
         a.size = None;
         assert_eq!(
             plain(tray_tip(&[a], Lang::En, Digits::Latn)),
-            "Zajil\nDownloading: 1 download · 2 MiB/s"
+            "ALHami\nDownloading: 1 download · 2 MiB/s"
         );
     }
 

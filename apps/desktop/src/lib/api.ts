@@ -46,7 +46,7 @@ export const api = {
   /** The drop box (M5.5): shown or not, and showing or hiding it. */
   dropBoxShown: () => invoke<boolean>("drop_box_shown"),
   setDropBox: (shown: boolean) => invoke<void>("set_drop_box", { shown }),
-  /** Closing the window quits Zajil; and whether there is a tray. */
+  /** Closing the window quits ALHami; and whether there is a tray. */
   closeQuits: () => invoke<[boolean, boolean]>("close_quits"),
   /** Which sounds play (M5.5). */
   soundPrefs: () => invoke<Sounds>("sound_prefs"),
@@ -59,7 +59,7 @@ export const api = {
     invoke<void>("set_item_details", { id, category, description }),
   setSoundPrefs: (sounds: Sounds) => invoke<void>("set_sound_prefs", { sounds }),
   setCloseQuits: (quits: boolean) => invoke<void>("set_close_quits", { quits }),
-  /** The page heard the «quit» a close sent: Zajil waits for its answer. */
+  /** The page heard the «quit» a close sent: ALHami waits for its answer. */
   quitHeard: () => invoke<void>("quit_heard"),
   add: (request: AddRequest) => invoke<number>("add", { request }),
   pause: (ids: number[]) => invoke<void>("pause", { ids }),
@@ -121,7 +121,7 @@ export const api = {
   openAddInfo: (url: string, title: string) => invoke<void>("open_add_info", { url, title }),
   /** What this «Download file info» window is for. */
   pendingInfo: () => invoke<InfoStart | null>("pending_info"),
-  /** A download from the browser: what Zajil learned of the file, once it
+  /** A download from the browser: what ALHami learned of the file, once it
    * has reached it. */
   offerAnswer: (offer: number) => invoke<OfferView>("offer_answer", { offer }),
   /** Adds a download from the browser as its window says; `early`: started
@@ -157,7 +157,7 @@ export const api = {
   onSettingsChanged: (handler: (settings: SettingsView) => void): Promise<UnlistenFn> =>
     listen<SettingsView>("settings-changed", (event) => handler(event.payload)),
   /** The proxy every download goes through (`null`: none); a change
-   * applies when Zajil next starts. */
+   * applies when ALHami next starts. */
   proxySetting: () => invoke<string | null>("proxy_setting"),
   setProxy: (proxy: string | null) => invoke<void>("set_proxy", { proxy }),
   /** What a progress window does when its download finishes, for all. */

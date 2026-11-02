@@ -1,4 +1,4 @@
-//! Zajil's translations (M4, ADR-0003): Fluent files in `locales/`, one
+//! ALHami's translations (M4, ADR-0003): Fluent files in `locales/`, one
 //! per language, shared by the GUI (which loads the same files with
 //! `@fluent/bundle`, ADR-0008) and the Rust side (the tray menu and the
 //! notifications). The command line stays in English (owner's decision on
@@ -17,7 +17,7 @@
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use unic_langid::LanguageIdentifier;
 
-/// The languages Zajil ships, Arabic first.
+/// The languages ALHami ships, Arabic first.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Lang {
     Ar,
@@ -40,11 +40,11 @@ impl Lang {
         matches!(self, Lang::Ar)
     }
 
-    /// The Fluent source of this language (`locales/<tag>/zajil.ftl`).
+    /// The Fluent source of this language (`locales/<tag>/alhami.ftl`).
     pub fn source(self) -> &'static str {
         match self {
-            Lang::Ar => include_str!("../../../locales/ar/zajil.ftl"),
-            Lang::En => include_str!("../../../locales/en/zajil.ftl"),
+            Lang::Ar => include_str!("../../../locales/ar/alhami.ftl"),
+            Lang::En => include_str!("../../../locales/en/alhami.ftl"),
         }
     }
 }

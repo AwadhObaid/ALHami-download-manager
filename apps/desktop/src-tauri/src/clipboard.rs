@@ -119,7 +119,7 @@ impl<C: zajil_platform::clipboard::Clipboard> ClipboardWatcher<C> {
     fn say(&mut self, err: std::io::Error) -> Option<String> {
         let said = err.to_string();
         if self.said.as_ref() != Some(&said) {
-            eprintln!("zajil: clipboard monitoring: {said}");
+            eprintln!("alhami: clipboard monitoring: {said}");
             self.said = Some(said);
         }
         None

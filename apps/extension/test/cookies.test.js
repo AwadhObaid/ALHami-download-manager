@@ -46,7 +46,7 @@ describe("the cookie permission", () => {
     expect(SITE_PERMISSIONS).toEqual({ permissions: ["cookies", "scripting", "webRequest"], origins: ["<all_urls>"] });
   });
 
-  it("'Allow Zajil on sites' asks for both at once, and takes both back", async () => {
+  it("'Allow ALHami on sites' asks for both at once, and takes both back", async () => {
     const api = browserWith({ granted: false });
     expect(await sitesAllowed(api)).toBe(false);
     expect(await askForSites(api)).toBe(true);
@@ -125,13 +125,13 @@ describe("without the permission", () => {
 });
 
 describe("a site that wants a sign-in", () => {
-  it("is told by the server's 401 or 403 to Zajil", () => {
+  it("is told by the server's 401 or 403 to ALHami", () => {
     for (const status of ["401 Unauthorized", "403 Forbidden"]) {
-      expect(needsSignIn({ outcome: "refused", error: `Zajil cannot download it: the server answered ${status}` })).toBe(true);
+      expect(needsSignIn({ outcome: "refused", error: `ALHami cannot download it: the server answered ${status}` })).toBe(true);
     }
     for (const result of [
-      { outcome: "refused", error: "Zajil cannot download it: the server answered 404 Not Found" },
-      { outcome: "refused", error: "Zajil cannot download it: the server sent a web page (a sign-in page?), not the file" },
+      { outcome: "refused", error: "ALHami cannot download it: the server answered 404 Not Found" },
+      { outcome: "refused", error: "ALHami cannot download it: the server sent a web page (a sign-in page?), not the file" },
       { outcome: "unreachable", error: "the server answered 403" },
       { outcome: "taken" },
       null,

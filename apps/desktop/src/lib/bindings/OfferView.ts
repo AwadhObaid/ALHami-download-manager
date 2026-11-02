@@ -2,7 +2,7 @@
 import type { ProbeView } from "./ProbeView";
 
 /**
- * What «Download file info» of a browser's download learns once Zajil
+ * What «Download file info» of a browser's download learns once ALHami
  * has reached the file.
  */
 export type OfferView = { probe: ProbeView, 

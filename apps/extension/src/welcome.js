@@ -1,6 +1,6 @@
 // @ts-check
 // The welcome page, opened once at install: what the extension does, and
-// "Allow Zajil on sites" (the cookies and the video features), asked for
+// "Allow ALHami on sites" (the cookies and the video features), asked for
 // only when the user presses the button.
 
 import { api } from "./compat.js";

@@ -30,7 +30,7 @@ use zajil_platform::power::{PowerAction, SystemPower};
 
 use crate::App;
 
-/// The schedule window's capability: listening to Zajil's events, nothing
+/// The schedule window's capability: listening to ALHami's events, nothing
 /// else (the file to open after a queue is picked and confirmed from Rust,
 /// #142). Added when the app starts, for this window only.
 pub const CAPABILITY: &str = include_str!("../runtime-capabilities/schedule.json");
@@ -667,7 +667,7 @@ fn open_after(handle: &tauri::AppHandle, queue: String) {
                 .opener()
                 .open_path(file.to_string_lossy(), None::<&str>)
         {
-            eprintln!("zajil: the file to open after the queue: {err}");
+            eprintln!("alhami: the file to open after the queue: {err}");
         }
     });
 }
@@ -735,7 +735,7 @@ async fn count_down(handle: &tauri::AppHandle, after: &After, queue: String, act
         Ok(_) => None,
     };
     if let Some(problem) = problem {
-        eprintln!("zajil: after queue {queue}: {problem}");
+        eprintln!("alhami: after queue {queue}: {problem}");
         let _ = handle.emit_to(LABEL, "after-failed", problem);
     }
 }
@@ -941,7 +941,7 @@ mod tests {
         assert_eq!(due(&q, night, &mut chosen, |_| true), None);
     }
 
-    /// The schedule window may listen to Zajil's events, and nothing more:
+    /// The schedule window may listen to ALHami's events, and nothing more:
     /// the file to open after a queue is picked and confirmed from Rust.
     #[test]
     fn the_schedule_window_has_only_its_own_permissions() {

@@ -2,8 +2,8 @@
 // Rust side (`locales/`, crate `zajil-i18n`), through @fluent/bundle.
 // Changing the language changes every text at once, without a restart.
 import { FluentBundle, FluentResource, type FluentVariable } from "@fluent/bundle";
-import ar from "../../../../locales/ar/zajil.ftl?raw";
-import en from "../../../../locales/en/zajil.ftl?raw";
+import ar from "../../../../locales/ar/alhami.ftl?raw";
+import en from "../../../../locales/en/alhami.ftl?raw";
 
 export type Lang = "ar" | "en";
 export type Digits = "latn" | "arab";

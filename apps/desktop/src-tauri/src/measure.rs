@@ -1,5 +1,5 @@
 //! How fast the windows open, for the developers: with `ZAJIL_MEASURE=1`,
-//! Zajil opens and closes «Add a link», «Download file info» and a
+//! ALHami opens and closes «Add a link», «Download file info» and a
 //! progress window a few times by itself once its main window is up, and
 //! prints how long each took from the open to its page's first frame
 //! (`zajil-measure: …` lines). `ZAJIL_POOL=0` opens them without the
@@ -10,7 +10,7 @@ use std::collections::HashMap;
 use std::sync::{LazyLock, Mutex};
 use std::time::{Duration, Instant};
 
-/// When Zajil started, for the main window's own time.
+/// When ALHami started, for the main window's own time.
 static STARTED: LazyLock<Instant> = LazyLock::new(Instant::now);
 
 /// When each window was asked to open, by role.
@@ -28,7 +28,7 @@ pub fn show() -> Option<String> {
         .filter(|v| v == "settings" || v == "add-info")
 }
 
-/// `ZAJIL_MEASURE=tray`: once the main window is up, Zajil closes it into
+/// `ZAJIL_MEASURE=tray`: once the main window is up, ALHami closes it into
 /// the tray as the close button does, then shows it again, saying when
 /// (`zajil-measure: tray …` lines, with the seconds since the start), so
 /// its memory and CPU can be read in each state. `ZAJIL_MEASURE_TRAY=a,b`:
@@ -43,7 +43,7 @@ pub fn pool_on() -> bool {
     std::env::var_os("ZAJIL_POOL").is_none_or(|v| v != "0")
 }
 
-/// Zajil starts: its clock starts.
+/// ALHami starts: its clock starts.
 pub fn start() {
     LazyLock::force(&STARTED);
 }
@@ -170,7 +170,7 @@ pub fn drive<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
                     );
                 crate::windows::INFO_SIZE
             };
-            let _ = crate::windows::open(&handle, &window, "Zajil", size);
+            let _ = crate::windows::open(&handle, &window, "ALHami", size);
             if let Some(window) = crate::windows::find(&handle, &window) {
                 let _ = window.set_always_on_top(true);
             }
@@ -222,7 +222,7 @@ pub fn drive<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
                             },
                         );
                 }
-                if let Err(err) = crate::windows::open(&handle, label, "Zajil", size) {
+                if let Err(err) = crate::windows::open(&handle, label, "ALHami", size) {
                     eprintln!("zajil-measure: {label} did not open: {err}");
                 }
                 // In front of every app, as a window the user opened is:

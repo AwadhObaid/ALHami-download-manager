@@ -6,7 +6,7 @@
   import { locale } from "../i18n.svelte";
   import { onMac } from "../keys";
 
-  // The main window's title bar (the design of #83): the logo and «زاجِل
+  // The main window's title bar (the design of #83): the logo and «الحامي
   // لإدارة التحميل» always on the side away from the window's buttons
   // (the owner's choice, 2026-11-01), so the two never crowd each other.
   // The window is dragged by it and a double-click maximizes it
@@ -21,7 +21,7 @@
   //   system's does (into the tray, #109).
   const mac = onMac();
   // The Mac's coloured buttons follow the system's first language, not
-  // Zajil's: on the right when it reads right to left.
+  // ALHami's: on the right when it reads right to left.
   const buttonsRight = mac && /^(ar|he|fa|ur|ps|sd|ug|yi|dv|ckb)(-|$)/i.test(navigator.language);
   // Where the logo goes: opposite the buttons.
   const brandRight = $derived(mac ? !buttonsRight : locale.dir === "rtl");

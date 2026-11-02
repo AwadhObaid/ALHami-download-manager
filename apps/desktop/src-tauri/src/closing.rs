@@ -1,8 +1,8 @@
 //! Closing the main window (owner's decision, after #105), as in IDM: the
-//! window hides and Zajil goes on in the system tray, the downloads with
+//! window hides and ALHami goes on in the system tray, the downloads with
 //! it; the first time, a notification says so. On macOS the program goes on
 //! the same way, its icon in the Dock (a click on it shows the window). The
-//! setting «Closing the window quits Zajil» and a desktop with no system
+//! setting «Closing the window quits ALHami» and a desktop with no system
 //! tray (GNOME without the extension) make closing quit, through the page's
 //! Quit, which asks first while downloads run.
 //!
@@ -20,7 +20,7 @@ use tauri::{Emitter, Manager, State};
 /// What `window.json` holds.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct WindowPrefs {
-    /// Closing the main window quits Zajil.
+    /// Closing the main window quits ALHami.
     #[serde(default)]
     pub close_quits: bool,
     /// The «still running in the tray» notification was shown once.
@@ -61,7 +61,7 @@ pub struct Closing {
     forced: bool,
 }
 
-/// How long the page has to answer a close's «quit» before Zajil quits
+/// How long the page has to answer a close's «quit» before ALHami quits
 /// without it (a page not loaded or stuck: review of #109).
 const PAGE_ANSWER: Duration = Duration::from_secs(3);
 
@@ -145,7 +145,7 @@ fn save(path: &Path, prefs: &WindowPrefs) -> std::io::Result<()> {
 /// What closing the main window does.
 #[derive(Debug, PartialEq, Eq)]
 pub enum OnClose {
-    /// Hide it; Zajil goes on (with the notice the first time).
+    /// Hide it; ALHami goes on (with the notice the first time).
     Hide { notice: bool },
     /// Quit, through the page's Quit.
     Quit,
@@ -198,7 +198,7 @@ pub fn watch<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
             return;
         }
         // `--close-quits` (the tests, and any script that closes the
-        // window to quit Zajil): the window closes as before #109, and the
+        // window to quit ALHami): the window closes as before #109, and the
         // program ends the way closing always ended it, the downloads
         // recording their progress first; no question, which nobody would
         // answer.
@@ -210,7 +210,7 @@ pub fn watch<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
         match on_close(&closing.prefs(), closing.tray()) {
             OnClose::Quit => {
                 // The page's Quit asks first while downloads run; a page
-                // that does not answer does not keep Zajil open.
+                // that does not answer does not keep ALHami open.
                 closing.heard.store(false, Ordering::SeqCst);
                 let _ = app.emit_to("main", "menu-command", "quit");
                 let app = app.clone();
@@ -249,7 +249,7 @@ fn show_notice<R: tauri::Runtime>(app: &tauri::AppHandle<R>, closing: &Closing) 
         .is_ok()
 }
 
-/// Whether closing the main window quits Zajil (the settings), and whether
+/// Whether closing the main window quits ALHami (the settings), and whether
 /// this desktop has a system tray to go on in.
 #[tauri::command]
 pub(crate) fn close_quits(closing: State<'_, Closing>) -> (bool, bool) {

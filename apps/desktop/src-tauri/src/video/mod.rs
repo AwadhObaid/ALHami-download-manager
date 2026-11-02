@@ -134,7 +134,7 @@ pub fn split(ids: Vec<u64>) -> (Vec<u64>, Vec<u64>) {
 const ROWS_FILE: &str = "videos.json";
 
 /// One video download of the list. A stopped one continues from what it
-/// saved (Zajil's own parts, or yt-dlp's kept folder); «resume» may ask
+/// saved (ALHami's own parts, or yt-dlp's kept folder); «resume» may ask
 /// the page again for new links.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 struct Row {

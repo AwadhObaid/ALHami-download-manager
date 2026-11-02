@@ -99,7 +99,7 @@ fn open_tickets(queues: &QueuesFile, instance: &str) -> Vec<String> {
 /// How long a browser that did not answer is left before it is asked
 /// again (unless it links again meanwhile).
 const ASK_AGAIN: Duration = Duration::from_secs(5);
-/// How long Zajil waits for a browser's answer.
+/// How long ALHami waits for a browser's answer.
 const ASK_PATIENCE: Duration = Duration::from_secs(15);
 
 /// The downloads whose browser is being asked for cookies, or was lately.

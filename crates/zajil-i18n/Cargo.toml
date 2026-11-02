@@ -1,6 +1,6 @@
 [package]
 name = "zajil-i18n"
-description = "Zajil translations (Fluent): the same files for the GUI and the Rust side"
+description = "ALHami translations (Fluent): shared by the GUI and Rust"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

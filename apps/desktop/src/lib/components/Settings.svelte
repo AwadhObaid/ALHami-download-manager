@@ -74,7 +74,7 @@
     saveDoubleClick(choice);
   }
 
-  // The proxy: it applies when Zajil next starts.
+  // The proxy: it applies when ALHami next starts.
   let proxy = $state("");
   let proxyOn = $state(false);
   let proxySaid = $state<{ text: string; problem: boolean } | null>(null);

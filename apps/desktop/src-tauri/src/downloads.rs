@@ -30,14 +30,14 @@ pub(crate) async fn snapshot<R: tauri::Runtime>(
     if main && !app.page_ready.swap(true, Ordering::SeqCst) {
         // The page is up and talking to the program (the open-and-close
         // check of CI waits for this line).
-        eprintln!("zajil: the window is ready");
+        eprintln!("alhami: the window is ready");
         // The windows the user waits for are made now, hidden.
         windows::warm(&handle);
         if measure::on() || measure::show().is_some() || measure::tray() {
             measure::drive(&handle);
         }
     }
-    // The first look of a main page made again: what Zajil said in the
+    // The first look of a main page made again: what ALHami said in the
     // tray while there was none, it says from now (`in_tray.rs`).
     if main {
         crate::in_tray::hand_over(&handle).await;
@@ -68,7 +68,7 @@ pub(crate) fn tell_progress<R: tauri::Runtime>(handle: &tauri::AppHandle<R>) {
 }
 
 /// What the list shows: the queues' downloads, then the videos, without
-/// those a window still asks about. The page's, and Zajil's own while the
+/// those a window still asks about. The page's, and ALHami's own while the
 /// main window is freed in the tray (`in_tray.rs`).
 pub(crate) async fn listed<R: tauri::Runtime>(
     app: &App,

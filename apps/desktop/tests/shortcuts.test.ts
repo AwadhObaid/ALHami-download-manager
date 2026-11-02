@@ -33,7 +33,7 @@ describe("shortcuts", () => {
 
 describe("the status of a failed download", () => {
   it("names the server's code when there is one", () => {
-    expect(errorCode("Zajil cannot download it: the server answered 403 Forbidden")).toBe("403");
+    expect(errorCode("ALHami cannot download it: the server answered 403 Forbidden")).toBe("403");
     expect(errorCode("the server answered 404 Not Found")).toBe("404");
     expect(errorCode("connection reset")).toBeNull();
     expect(errorCode(null)).toBeNull();

@@ -45,7 +45,7 @@ pub fn delete_soon(files: Vec<PathBuf>) {
             std::thread::sleep(std::time::Duration::from_millis(500));
         }
         for f in files.iter().filter(|f| f.exists()) {
-            eprintln!("zajil: could not delete {}", f.display());
+            eprintln!("alhami: could not delete {}", f.display());
         }
     });
 }

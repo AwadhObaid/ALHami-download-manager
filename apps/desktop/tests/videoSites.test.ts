@@ -22,7 +22,7 @@ describe("a video's page", () => {
 
   it("is not a file, another page of those sites, or anything else", () => {
     for (const link of [
-      "https://github.com/motalim-ai/zajil-download-manager/releases/download/v1.1.3/Zajil_1.1.3_universal.dmg",
+      "https://github.com/motalim-ai/zajil-download-manager/releases/download/v1.1.3/ALHami_1.1.3_universal.dmg",
       "https://www.youtube.com/",
       "https://x.com/motalim_ai",
       "https://www.instagram.com/someone/",

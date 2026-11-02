@@ -1,6 +1,6 @@
 //! «Copy problem info» (owner's decision, 2026-10-31: copied, never sent
-//! by Zajil): what a report needs, on the clipboard for the user to paste
-//! wherever they ask for help. Zajil's version, the system, the language,
+//! by ALHami): what a report needs, on the clipboard for the user to paste
+//! wherever they ask for help. ALHami's version, the system, the language,
 //! the video tools, an extension that said it is old, and the log's last
 //! lines. The log never holds a link or a cookie; a link that got in
 //! anyway, and the user's home folder (their name), are taken out here.
@@ -34,7 +34,7 @@ pub struct Facts<'a> {
 /// and no home folder.
 pub fn text(facts: &Facts<'_>, log: &str, home: Option<&Path>) -> String {
     let mut out = vec![
-        format!("Zajil {}", facts.version),
+        format!("ALHami {}", facts.version),
         format!("System: {} {}", facts.os, facts.arch),
         format!("Language: {}", facts.language),
     ];
@@ -52,7 +52,7 @@ pub fn text(facts: &Facts<'_>, log: &str, home: Option<&Path>) -> String {
     out.push(format!("Video tools: {}", tools.join(", ")));
     if let Some(old) = &facts.extension_old {
         out.push(format!(
-            "Browser extension: {old} (older than this Zajil needs)"
+            "Browser extension: {old} (older than this ALHami needs)"
         ));
     }
     out.push(String::new());
@@ -170,19 +170,19 @@ mod tests {
             ],
             extension_old: Some("1.2.1".into()),
         };
-        let mut log: Vec<String> = (0..150).map(|i| format!("zajil: line {i}")).collect();
-        log.push("zajil: could not read https://example.com/v?token=SECRET now".into());
-        log.push("zajil: saved /Users/hussein/Downloads/x.mp4".into());
+        let mut log: Vec<String> = (0..150).map(|i| format!("alhami: line {i}")).collect();
+        log.push("alhami: could not read https://example.com/v?token=SECRET now".into());
+        log.push("alhami: saved /Users/hussein/Downloads/x.mp4".into());
         let home = Path::new("/Users/hussein");
         let got = text(&facts, &log.join("\n"), Some(home));
-        assert!(got.starts_with("Zajil 1.2.1\nSystem: macos aarch64\nLanguage: ar\n"));
+        assert!(got.starts_with("ALHami 1.2.1\nSystem: macos aarch64\nLanguage: ar\n"));
         assert!(got.contains("Video tools: yt-dlp 2026.10.21, ffmpeg 8.1.3 (not installed)"));
-        assert!(got.contains("Browser extension: 1.2.1 (older than this Zajil needs)"));
+        assert!(got.contains("Browser extension: 1.2.1 (older than this ALHami needs)"));
         assert!(!got.contains("line 51\n"), "only the last lines");
         assert!(got.contains("line 149"));
-        assert!(got.contains("zajil: could not read (link) now"));
+        assert!(got.contains("alhami: could not read (link) now"));
         assert!(!got.contains("SECRET") && !got.contains("example.com"));
-        assert!(got.contains("zajil: saved ~/Downloads/x.mp4"));
+        assert!(got.contains("alhami: saved ~/Downloads/x.mp4"));
         assert!(!got.contains("hussein"));
     }
 }

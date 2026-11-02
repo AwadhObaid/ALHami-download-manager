@@ -1,18 +1,18 @@
 // @ts-check
 // YouTube's own word on its video's formats, for the video button's list
 // (owner's decision, 2026-10-29: the qualities show at once, with their
-// sizes, without waiting for Zajil to read the page).
+// sizes, without waiting for ALHami to read the page).
 //
 // This script runs in the page's own world (`world: "MAIN"`), on YouTube
-// only, while "Allow Zajil on sites" lasts: only there is the player's
+// only, while "Allow ALHami on sites" lasts: only there is the player's
 // answer to see (`getPlayerResponse`, else `ytInitialPlayerResponse`). It
 // reads the formats' description (itag, type, size, rate, picture) and
 // nothing else: no link, no cookie. Asked by `zajil-yt-ask` on the
 // document, it answers `zajil-yt-formats` with that, as JSON text.
 //
 // What it says comes from the page, which may say anything: the button
-// only shows it, every value checked there, and a press sends Zajil only
-// a format's itag, which Zajil looks for in what it read itself.
+// only shows it, every value checked there, and a press sends ALHami only
+// a format's itag, which ALHami looks for in what it read itself.
 
 (() => {
   const flag = "__zajilYtPage";

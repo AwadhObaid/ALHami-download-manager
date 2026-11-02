@@ -12,7 +12,7 @@ const $ = (id) => /** @type {any} */ (document.getElementById(id));
 
 localize(api, document);
 
-/** "Allow Zajil on sites": what it is now, and the buttons that change it. */
+/** "Allow ALHami on sites": what it is now, and the buttons that change it. */
 async function showCookies() {
   const view = await permissionView(api);
   $("cookies-state").textContent = api.i18n.getMessage(view.text);

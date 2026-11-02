@@ -1,8 +1,8 @@
 <script lang="ts" module>
-  // Zajil's own coloured icons (the owner's request: the toolbar, the tree
+  // ALHami's own coloured icons (the owner's request: the toolbar, the tree
   // and the list with more life, as desktop download managers have):
   // filled shapes with a soft gradient and a white glyph or a small badge.
-  // Drawn for Zajil, from no other program's icons.
+  // Drawn for ALHami, from no other program's icons.
 
   /** The colours, light and dark at once: each shape's top and bottom. */
   const TONES = {

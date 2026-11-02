@@ -12,7 +12,7 @@ export const updateApi = {
   openReleasePage: () => invoke<void>("open_release_page"),
   /** «Skip this version»: not shown again; a newer one is. */
   skip: () => invoke<void>("update_skip"),
-  /** «Update now»: downloads, checks and installs it, then Zajil opens again. */
+  /** «Update now»: downloads, checks and installs it, then ALHami opens again. */
   install: () => invoke<void>("update_install"),
   onFound: (handler: (found: UpdateView) => void): Promise<UnlistenFn> =>
     listen<UpdateView>("update-available", (event) => handler(event.payload)),
