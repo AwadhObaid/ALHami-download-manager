@@ -33,8 +33,13 @@ fn menu<R: Runtime, M: Manager<R>>(
 /// the chosen language.
 pub fn build<R: Runtime>(app: &tauri::App<R>) -> tauri::Result<()> {
     let tray = TrayIconBuilder::with_id(ID)
-        .menu(&menu(app, "افتح زاجِل", "إظهار سلة الإسقاط", "إنهاء زاجِل")?)
-        .tooltip("Zajil")
+        .menu(&menu(
+            app,
+            "افتح ALHami Download Manager",
+            "إظهار سلة الإسقاط",
+            "إنهاء ALHami Download Manager",
+        )?)
+        .tooltip("ALHami Download Manager")
         .show_menu_on_left_click(false)
         .on_menu_event(|app, event| match event.id.as_ref() {
             "show" => show_window(app),

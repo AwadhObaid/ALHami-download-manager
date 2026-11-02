@@ -14,10 +14,10 @@ use crate::{Engine, Error, Stop};
 
 /// GitHub's list of Zajil's releases.
 pub const RELEASES: &str =
-    "https://api.github.com/repos/motalim-ai/zajil-download-manager/releases?per_page=30";
+    "https://api.github.com/repos/AwadhObaid/ALHami-download-manager/releases?per_page=30";
 
 /// Every release page is under this address.
-pub const RELEASE_PAGES: &str = "https://github.com/motalim-ai/zajil-download-manager/releases/";
+pub const RELEASE_PAGES: &str = "https://github.com/AwadhObaid/ALHami-download-manager/releases/";
 
 /// The most of GitHub's answer that is read.
 pub const MAX_ANSWER: usize = 1024 * 1024;
@@ -139,7 +139,7 @@ mod tests {
         assert_eq!(found.version, "0.10.1");
         assert_eq!(
             found.page,
-            "https://github.com/motalim-ai/zajil-download-manager/releases/tag/v0.10.1"
+            "https://github.com/AwadhObaid/ALHami-download-manager/releases/tag/v0.10.1"
         );
         assert_eq!(newest(&json, (0, 10, 1)).unwrap(), None);
         assert_eq!(newest("[]", (0, 1, 0)).unwrap(), None);

@@ -4,19 +4,19 @@
 //! must use these constants.
 
 /// Name of the per-user configuration, data and log folders.
-pub const APP_DIR_NAME: &str = "zajil";
+pub const APP_DIR_NAME: &str = "alhami-download-manager";
 
 /// Reverse-DNS id with a hyphen. Used where Apple or Tauri require it:
 /// `CFBundleIdentifier` on macOS and the Tauri `identifier` field.
-pub const APPLE_BUNDLE_ID: &str = "io.github.motalim-ai.zajil";
+pub const APPLE_BUNDLE_ID: &str = "com.awadhobaid.alhami-download-manager";
 
 /// Reverse-DNS id with an underscore. The default form: Linux app id
 /// (Flatpak, AppStream, `.desktop`) and D-Bus names.
-pub const APP_ID: &str = "io.github.motalim_ai.zajil";
+pub const APP_ID: &str = "com.awadhobaid.alhami_download_manager";
 
 /// Native Messaging host name for Chrome, Edge and Firefox on all systems.
 /// On Windows it is also the registry key name.
-pub const NATIVE_HOST_NAME: &str = "io.github.motalim_ai.zajil.host";
+pub const NATIVE_HOST_NAME: &str = "com.awadhobaid.alhami_download_manager.host";
 
 /// The extension's id in Chrome and Edge: from the public `key` in its
 /// manifest (`apps/extension/src/manifest.chrome.json`; owner's decision on

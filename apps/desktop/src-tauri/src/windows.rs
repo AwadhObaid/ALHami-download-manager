@@ -430,7 +430,7 @@ fn refill<R: tauri::Runtime>(handle: &tauri::AppHandle<R>, kind: Kind, delay: st
             &label,
             WebviewUrl::App("index.html?win=spare".into()),
         )
-        .title("Zajil")
+        .title("ALHami Download Manager")
         .inner_size(width, height)
         .resizable(true)
         .maximizable(false)

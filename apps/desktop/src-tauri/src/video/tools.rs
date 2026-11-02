@@ -42,9 +42,9 @@ fn source_of(tool: Tool, pin: Option<&zajil_core::tools::Pinned>) -> String {
     match tool {
         Tool::YtDlp => "https://github.com/yt-dlp/yt-dlp",
         Tool::QuickJs => "https://github.com/quickjs-ng/quickjs",
-        // Our own build, with its exact source, on Zajil's releases.
+        // Our own build, with its exact source, on ALHami's releases.
         Tool::Ffmpeg | Tool::Ffprobe => {
-            "https://github.com/motalim-ai/zajil-download-manager/releases"
+            "https://github.com/AwadhObaid/ALHami-download-manager/releases"
         }
     }
     .into()

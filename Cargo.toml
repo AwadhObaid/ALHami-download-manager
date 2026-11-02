@@ -6,7 +6,7 @@ members = ["crates/*"]
 version = "1.2.3"
 edition = "2024"
 license = "GPL-3.0-or-later"
-repository = "https://github.com/motalim-ai/zajil-download-manager"
+repository = "https://github.com/AwadhObaid/ALHami-download-manager"
 publish = false
 
 # Shared dependency versions. Every entry is listed with its license and
