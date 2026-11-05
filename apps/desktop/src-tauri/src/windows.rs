@@ -802,7 +802,7 @@ mod tests {
             ),
             (
                 "tauri.linux.conf.json",
-                serde_json::json!({"decorations": false}),
+                serde_json::json!({"title": "ALHami", "decorations": false}),
             ),
         ] {
             let mut expected = base.clone();
