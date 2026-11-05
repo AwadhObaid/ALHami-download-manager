@@ -200,14 +200,22 @@ mod tests {
     fn linux_defaults_follow_xdg() {
         let home = home();
         let paths = linux::layout(&home, env_from(&[]), None);
-        assert_eq!(paths.config_dir(), home.join(".config").join("alhami-download-manager"));
+        assert_eq!(
+            paths.config_dir(),
+            home.join(".config").join("alhami-download-manager")
+        );
         assert_eq!(
             paths.data_dir(),
-            home.join(".local").join("share").join("alhami-download-manager")
+            home.join(".local")
+                .join("share")
+                .join("alhami-download-manager")
         );
         assert_eq!(
             paths.log_dir(),
-            home.join(".local").join("state").join("alhami-download-manager").join("logs")
+            home.join(".local")
+                .join("state")
+                .join("alhami-download-manager")
+                .join("logs")
         );
         assert_eq!(paths.download_dir(), home.join("Downloads"));
     }
@@ -225,11 +233,20 @@ mod tests {
             ]),
             Some(custom.join("dl")),
         );
-        assert_eq!(paths.config_dir(), custom.join("cfg").join("alhami-download-manager"));
-        assert_eq!(paths.data_dir(), custom.join("data").join("alhami-download-manager"));
+        assert_eq!(
+            paths.config_dir(),
+            custom.join("cfg").join("alhami-download-manager")
+        );
+        assert_eq!(
+            paths.data_dir(),
+            custom.join("data").join("alhami-download-manager")
+        );
         assert_eq!(
             paths.log_dir(),
-            custom.join("state").join("alhami-download-manager").join("logs")
+            custom
+                .join("state")
+                .join("alhami-download-manager")
+                .join("logs")
         );
         assert_eq!(paths.download_dir(), custom.join("dl"));
     }
@@ -245,10 +262,15 @@ mod tests {
             ]),
             Some(PathBuf::from("relative/dl")),
         );
-        assert_eq!(paths.config_dir(), home.join(".config").join("alhami-download-manager"));
+        assert_eq!(
+            paths.config_dir(),
+            home.join(".config").join("alhami-download-manager")
+        );
         assert_eq!(
             paths.data_dir(),
-            home.join(".local").join("share").join("alhami-download-manager")
+            home.join(".local")
+                .join("share")
+                .join("alhami-download-manager")
         );
         assert_eq!(paths.download_dir(), home.join("Downloads"));
     }
@@ -265,7 +287,9 @@ mod tests {
         assert_eq!(paths.data_dir(), support);
         assert_eq!(
             paths.log_dir(),
-            home.join("Library").join("Logs").join("alhami-download-manager")
+            home.join("Library")
+                .join("Logs")
+                .join("alhami-download-manager")
         );
         assert_eq!(paths.download_dir(), home.join("Downloads"));
     }
@@ -278,7 +302,10 @@ mod tests {
         let paths = windows::layout(&roaming, &local, &downloads);
         assert_eq!(paths.config_dir(), roaming.join("alhami-download-manager"));
         assert_eq!(paths.data_dir(), local.join("alhami-download-manager"));
-        assert_eq!(paths.log_dir(), local.join("alhami-download-manager").join("logs"));
+        assert_eq!(
+            paths.log_dir(),
+            local.join("alhami-download-manager").join("logs")
+        );
         assert_eq!(paths.download_dir(), downloads);
     }
 }

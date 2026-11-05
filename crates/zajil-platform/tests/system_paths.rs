@@ -42,7 +42,10 @@ fn windows_uses_roaming_and_local_app_data_and_the_downloads_known_folder() {
     let local = std::path::PathBuf::from(std::env::var_os("LOCALAPPDATA").expect("LOCALAPPDATA"));
     assert_eq!(paths.config_dir(), roaming.join("alhami-download-manager"));
     assert_eq!(paths.data_dir(), local.join("alhami-download-manager"));
-    assert_eq!(paths.log_dir(), local.join("alhami-download-manager").join("logs"));
+    assert_eq!(
+        paths.log_dir(),
+        local.join("alhami-download-manager").join("logs")
+    );
     assert!(
         paths.download_dir().ends_with("Downloads"),
         "{}",
@@ -63,7 +66,9 @@ fn macos_uses_the_library_folders_of_the_home_folder() {
     assert_eq!(paths.data_dir(), support);
     assert_eq!(
         paths.log_dir(),
-        home.join("Library").join("Logs").join("alhami-download-manager")
+        home.join("Library")
+            .join("Logs")
+            .join("alhami-download-manager")
     );
     assert_eq!(paths.download_dir(), home.join("Downloads"));
 }
