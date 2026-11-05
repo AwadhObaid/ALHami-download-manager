@@ -73,6 +73,12 @@ jobs:
         run: |
           set -euo pipefail
           [ -n "$TAURI_SIGNING_PRIVATE_KEY" ] || { echo "::error::the release environment has no TAURI_SIGNING_PRIVATE_KEY"; exit 1; }
+          umask 077
+          key_file="$RUNNER_TEMP/alhami-tools.key"
+          trap 'rm -f "$key_file"' EXIT
+          printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" > "$key_file"
+          unset TAURI_SIGNING_PRIVATE_KEY
+          export TAURI_SIGNING_PRIVATE_KEY_PATH="$key_file"
           (cd apps/desktop && npm ci --ignore-scripts --no-audit --no-fund)
           sudo apt-get install -y -q --no-install-recommends minisign
           (cd apps/desktop && npx tauri signer sign "$GITHUB_WORKSPACE/tools.json" >/dev/null)
