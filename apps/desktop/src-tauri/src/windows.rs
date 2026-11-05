@@ -781,7 +781,7 @@ mod tests {
     /// (the design of #83): hidden under the page on macOS, none on Windows
     /// and Linux, where the page draws it.
     #[test]
-    fn the_main_window_differs_by_system_only_in_its_title_bar() {
+    fn the_main_window_uses_the_expected_platform_configuration() {
         let read = |name: &str| -> serde_json::Value {
             let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(name);
             serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap()
@@ -790,7 +790,11 @@ mod tests {
         for (name, own) in [
             (
                 "tauri.macos.conf.json",
-                serde_json::json!({"titleBarStyle": "Overlay", "hiddenTitle": true}),
+                serde_json::json!({
+                    "title": "ALHami",
+                    "titleBarStyle": "Overlay",
+                    "hiddenTitle": true
+                }),
             ),
             (
                 "tauri.windows.conf.json",
