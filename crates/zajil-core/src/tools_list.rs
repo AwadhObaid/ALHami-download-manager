@@ -149,7 +149,7 @@ pub fn checked(json: &[u8], signature: &str) -> Result<ToolsList, String> {
 
 fn checked_with(json: &[u8], signature: &str, keys: &[&str]) -> Result<ToolsList, String> {
     if !signed_by_any(json, signature, keys) {
-        return Err("the tools list is not signed by a key of Zajil's".into());
+        return Err("the tools list is not signed by an ALHami key".into());
     }
     parse(json)
 }
@@ -234,12 +234,10 @@ fn keep_with(
     Ok(list)
 }
 
-/// Where the newest list is published: a release of its own, apart from
-/// Zajil's (`.github/workflows/tools-list.yml`), so yt-dlp can be updated
-/// without a release of Zajil.
+/// Where ALHami publishes its signed tools list, independently of app releases.
 pub const LIST_URL: &str =
-    "https://github.com/motalim-ai/zajil-download-manager/releases/download/tools-list/tools.json";
-pub const SIGNATURE_URL: &str = "https://github.com/motalim-ai/zajil-download-manager/releases/download/tools-list/tools.json.minisig";
+    "https://github.com/AwadhObaid/ALHami-download-manager/releases/download/tools-list/tools.json";
+pub const SIGNATURE_URL: &str = "https://github.com/AwadhObaid/ALHami-download-manager/releases/download/tools-list/tools.json.minisig";
 
 /// Asks for the newest list and keeps it when it is signed and newer:
 /// `Some` with it when kept, `None` when it is not newer. The tools then

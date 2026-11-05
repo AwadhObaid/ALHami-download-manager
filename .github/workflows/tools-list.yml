@@ -1,14 +1,14 @@
 # The video tools' signed list (ADR-0011, section 2; owner's request,
-# 2026-10-31: yt-dlp updated without a whole release of Zajil).
+# 2026-10-31: yt-dlp updated without a whole ALHami release).
 #
 # Run by hand from main once a PR that changes tools/*/pins*.txt (and raises
 # tools/sequence.txt) is merged, with the tools' CI tests green. It writes
 # tools.json from those files, signs it in the `release` environment (the
 # owner approves each run; its secrets are the update key and its
-# password), checks the signature against the key built into Zajil, and
-# puts it on the `tools-list` pre-release, which Zajil reads at start
+# password), checks the signature against the key built into ALHami, and
+# puts it on the `tools-list` pre-release, which ALHami reads at start
 # (crates/zajil-core/src/tools_list.rs). Its number must be higher than the
-# list published before: Zajil refuses anything older.
+# list published before: ALHami refuses anything older.
 
 name: Tools list
 
@@ -84,8 +84,8 @@ jobs:
           set -euo pipefail
           if ! gh release view tools-list >/dev/null 2>&1; then
             gh release create tools-list --prerelease --target main \
-              --title "Zajil video tools list" \
-              --notes "The signed list of the video tools Zajil downloads (ADR-0011, section 2). Read by Zajil 1.2.2 and later; not a release of Zajil."
+              --title "ALHami video tools list" \
+              --notes "ALHami signed video-tools list (ADR-0011, section 2), separate from desktop app releases."
           fi
           gh release upload tools-list tools.json tools.json.minisig --clobber
           gh release view tools-list --json assets --jq '.assets[] | "\(.name) \(.size)"'
