@@ -51,6 +51,8 @@ ALHami Download Manager is an open-source download manager for Windows, derived 
 
 The current target is Windows 10/11 x64, with Arabic and English UI. Chrome, Microsoft Edge, and Firefox integration is planned; ALHami browser add-on identities and registration are still pending. ALHami uses a separate data directory. The project is licensed under GPL-3.0-or-later; see [LICENSE](LICENSE) and the retained copyright notices.
 
+The FFmpeg binaries used by the inherited download tooling are published with their LGPL source and notices in the [upstream FFmpeg tools release](https://github.com/motalim-ai/zajil-download-manager/releases/tag/tools-ffmpeg-8.1.3-1). This link identifies the source of those third-party binaries; it is not an ALHami release or update channel.
+
 ### Windows development
 
 Requirements: the Rust toolchain pinned in `rust-toolchain.toml`, Node.js 24, and Visual Studio Build Tools with MSVC x64 and the Windows SDK.

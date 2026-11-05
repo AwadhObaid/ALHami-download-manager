@@ -137,9 +137,9 @@ async function once(run, way) {
 
   stage = "waiting for the page to load";
   const loading = Date.now();
-  while (!ended && !stderr.includes("zajil: the window is ready") && Date.now() - loading < 60_000) await sleep(200);
+  while (!ended && !stderr.includes("alhami: the window is ready") && Date.now() - loading < 60_000) await sleep(200);
   if (ended) return fail("the app exited before its page loaded");
-  if (!stderr.includes("zajil: the window is ready")) return fail("the page never asked for the downloads within 60 s");
+  if (!stderr.includes("alhami: the window is ready")) return fail("the page did not report ready within 60 s");
   log("the page loaded");
   // Let the queues start before closing.
   await sleep(1000);

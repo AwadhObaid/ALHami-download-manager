@@ -1,6 +1,6 @@
 //! #124: the update check asks one list of releases, reads at most 1 MiB of
-//! it, and says the newest one newer than this Zajil, with its page built
-//! on Zajil's own releases address. Against the local test server only:
+//! it, and says the newest one newer than this ALHami, with its page built
+//! on ALHami's own releases address. Against the local test server only:
 //! never the internet.
 
 use zajil_core::update::{CheckError, newer_release_from};
@@ -28,7 +28,7 @@ async fn a_newer_release_is_said_with_its_own_page() {
     assert_eq!(found.version, "0.2.0");
     assert_eq!(
         found.page,
-        "https://github.com/motalim-ai/zajil-download-manager/releases/tag/v0.2.0"
+        "https://github.com/AwadhObaid/ALHami-download-manager/releases/tag/v0.2.0"
     );
     // Up to date: nothing.
     let none = newer_release_from(&engine, &url, "0.2.0", &Stop::new()).await;
