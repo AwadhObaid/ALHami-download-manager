@@ -123,8 +123,8 @@ mod imp {
     /// would go with its owner), no parent (a child hears no session end),
     /// not message-only (those hear no broadcasts).
     fn hidden_window() -> io::Result<HWND> {
-        let class: Vec<u16> = "ZajilSessionEnd\0".encode_utf16().collect();
-        let title: Vec<u16> = "Zajil\0".encode_utf16().collect();
+        let class: Vec<u16> = "ALHamiSessionEnd\0".encode_utf16().collect();
+        let title: Vec<u16> = "ALHami\0".encode_utf16().collect();
         // SAFETY: GetModuleHandleW(null) is this program's own module,
         // valid for as long as it runs. The class and title are
         // NUL-terminated UTF-16 that outlive the calls that read them
