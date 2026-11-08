@@ -352,14 +352,14 @@ impl HostProblem {
         }
     }
 
-    /// What `error` says. "Zajil did not answer" is what an extension of
-    /// before the codes reads as "Zajil may have it" (`NO_ANSWER` there).
+    /// What `error` says. "ALHami did not answer" is what an extension of
+    /// before the codes reads as "ALHami may have it" (`NO_ANSWER` there).
     pub fn text(self) -> &'static str {
         match self {
-            HostProblem::NotRunning => "Zajil is not running",
-            HostProblem::NotFound => "Zajil's program was not found",
-            HostProblem::Unreachable => "cannot reach Zajil",
-            HostProblem::NoAnswer => "Zajil did not answer",
+            HostProblem::NotRunning => "ALHami is not running",
+            HostProblem::NotFound => "ALHami's program was not found",
+            HostProblem::Unreachable => "cannot reach ALHami",
+            HostProblem::NoAnswer => "ALHami did not answer",
         }
     }
 }
@@ -913,7 +913,7 @@ mod tests {
         assert!(
             HostProblem::NoAnswer
                 .text()
-                .starts_with("Zajil did not answer")
+                .starts_with("ALHami did not answer")
         );
         // Other answers carry no code.
         assert!(

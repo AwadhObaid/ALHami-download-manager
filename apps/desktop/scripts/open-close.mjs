@@ -137,9 +137,9 @@ async function once(run, way) {
 
   stage = "waiting for the page to load";
   const loading = Date.now();
-  while (!ended && !stderr.includes("zajil: the window is ready") && Date.now() - loading < 60_000) await sleep(200);
+  while (!ended && !stderr.includes("alhami: the window is ready") && Date.now() - loading < 60_000) await sleep(200);
   if (ended) return fail("the app exited before its page loaded");
-  if (!stderr.includes("zajil: the window is ready")) return fail("the page never asked for the downloads within 60 s");
+  if (!stderr.includes("alhami: the window is ready")) return fail("the page did not report ready within 60 s");
   log("the page loaded");
   // Let the queues start before closing.
   await sleep(1000);
@@ -154,7 +154,7 @@ async function once(run, way) {
   const took = Date.now() - closing;
   if (!ended) return fail("no exit within 30 s of being asked to close");
   if (ended.code !== 0) return fail("it did not exit by itself with code 0");
-  if (!stderr.includes("zajil: the downloads stopped; exiting")) return fail("it exited without saying that the downloads stopped");
+  if (!stderr.includes("alhami: the downloads stopped; exiting")) return fail("it exited without saying that the downloads stopped");
   if (took > 4500) return fail(`it took ${took} ms: as long as its 5 s limit, so the downloads did not stop`);
   log(`the app stopped its downloads and closed cleanly in ${took} ms`);
   return null;

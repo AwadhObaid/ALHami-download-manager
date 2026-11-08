@@ -201,11 +201,11 @@ mod tests {
     use zajil_core::category::CategoriesFile;
 
     /// #121: the command line names each built-in category as the app does
-    /// in English (`category-<id>` in `locales/en/zajil.ftl`), so the two
+    /// in English (`category-<id>` in `locales/en/alhami.ftl`), so the two
     /// never drift apart again.
     #[test]
     fn built_in_names_are_the_app_s_english_ones() {
-        let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../locales/en/zajil.ftl");
+        let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../locales/en/alhami.ftl");
         let texts = std::fs::read_to_string(path).unwrap();
         let app_name = |id: &str| {
             let key = format!("category-{id} = ");

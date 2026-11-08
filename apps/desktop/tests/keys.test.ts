@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import ar from "../../../locales/ar/zajil.ftl?raw";
-import en from "../../../locales/en/zajil.ftl?raw";
+import ar from "../../../locales/ar/alhami.ftl?raw";
+import en from "../../../locales/en/alhami.ftl?raw";
 
 // Every key the interface asks for exists in Arabic and in English (review
 // of #57: 14 keys were missing from both files, and showed as raw keys; the

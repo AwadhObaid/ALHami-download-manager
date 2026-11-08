@@ -32,7 +32,7 @@ fn resolving_is_stable() {
 
 // Each system checks that its own implementation was chosen and follows its
 // own rules (ADR-0006, rule 3). `cfg` is allowed here: this is
-// `zajil-platform`'s own test.
+// `alhami-download-manager-platform`'s own test.
 
 #[cfg(target_os = "windows")]
 #[test]
@@ -40,9 +40,12 @@ fn windows_uses_roaming_and_local_app_data_and_the_downloads_known_folder() {
     let paths = SystemPaths::new().unwrap();
     let roaming = std::path::PathBuf::from(std::env::var_os("APPDATA").expect("APPDATA"));
     let local = std::path::PathBuf::from(std::env::var_os("LOCALAPPDATA").expect("LOCALAPPDATA"));
-    assert_eq!(paths.config_dir(), roaming.join("zajil"));
-    assert_eq!(paths.data_dir(), local.join("zajil"));
-    assert_eq!(paths.log_dir(), local.join("zajil").join("logs"));
+    assert_eq!(paths.config_dir(), roaming.join("alhami-download-manager"));
+    assert_eq!(paths.data_dir(), local.join("alhami-download-manager"));
+    assert_eq!(
+        paths.log_dir(),
+        local.join("alhami-download-manager").join("logs")
+    );
     assert!(
         paths.download_dir().ends_with("Downloads"),
         "{}",
@@ -58,12 +61,14 @@ fn macos_uses_the_library_folders_of_the_home_folder() {
     let support = home
         .join("Library")
         .join("Application Support")
-        .join("zajil");
+        .join("alhami-download-manager");
     assert_eq!(paths.config_dir(), support);
     assert_eq!(paths.data_dir(), support);
     assert_eq!(
         paths.log_dir(),
-        home.join("Library").join("Logs").join("zajil")
+        home.join("Library")
+            .join("Logs")
+            .join("alhami-download-manager")
     );
     assert_eq!(paths.download_dir(), home.join("Downloads"));
 }
@@ -81,16 +86,16 @@ fn linux_follows_the_xdg_variables_or_their_defaults() {
     };
     assert_eq!(
         paths.config_dir(),
-        base("XDG_CONFIG_HOME", &[".config"]).join("zajil")
+        base("XDG_CONFIG_HOME", &[".config"]).join("alhami-download-manager")
     );
     assert_eq!(
         paths.data_dir(),
-        base("XDG_DATA_HOME", &[".local", "share"]).join("zajil")
+        base("XDG_DATA_HOME", &[".local", "share"]).join("alhami-download-manager")
     );
     assert_eq!(
         paths.log_dir(),
         base("XDG_STATE_HOME", &[".local", "state"])
-            .join("zajil")
+            .join("alhami-download-manager")
             .join("logs")
     );
 }
