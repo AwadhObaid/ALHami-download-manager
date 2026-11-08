@@ -76,7 +76,8 @@ jobs:
           umask 077
           key_file="$RUNNER_TEMP/alhami-tools.key"
           trap 'rm -f "$key_file"' EXIT
-          printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" > "$key_file"
+          # The secret is the raw Minisign key file; Tauri's signer reads its Base64 encoding.
+          printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" | base64 -w 0 > "$key_file"
           unset TAURI_SIGNING_PRIVATE_KEY
           export TAURI_SIGNING_PRIVATE_KEY_PATH="$key_file"
           (cd apps/desktop && npm ci --ignore-scripts --no-audit --no-fund)
