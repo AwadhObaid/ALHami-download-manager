@@ -913,7 +913,7 @@ mod tests {
         assert!(
             HostProblem::NoAnswer
                 .text()
-                .starts_with("Zajil did not answer")
+                .starts_with("ALHami did not answer")
         );
         // Other answers carry no code.
         assert!(
